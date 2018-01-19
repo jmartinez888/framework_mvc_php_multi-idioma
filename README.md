@@ -1,14 +1,17 @@
 # framework_mvc_php_multidioma
-Framework MVC desde cero en php con multidioma y gestor de paginas estaticas
+Framework MVC desde cero en php con multi-idioma y gestor de páginas estáticas
 
-Este Framework esta basado en el ejemplo desarrollado por <a href="http://www.dlancedu.com/framework-mvc-b%C3%A1sico.html" target="_blank">dlancedu</a>, puedes ver la creacion desde cero en el siguiente enlace https://www.youtube.com/watch?v=BO2lzbSNvy0&list=PLMVWdD5bcndrmfgQdYeZqTx-OP8SQilJK
+Este Framework está basado en el ejemplo desarrollado por <a href="http://www.dlancedu.com/framework-mvc-b%C3%A1sico.html" target="_blank">dlancedu</a>, puedes ver la creación del Framework Básico desde cero en el siguiente enlace https://www.youtube.com/watch?v=BO2lzbSNvy0&list=PLMVWdD5bcndrmfgQdYeZqTx-OP8SQilJK
 
 Las funcionalidades desarrolladas por equipo BIOINFO-IIAP son las siguientes:
-->Multi-idioma a nivel de Base de datos y contenidos estaticos
-->Modulo de creacion de paginas estaticas almacenadas en la BD con opciones de traduccion
-->Bitacora de Registros de visitas y eventos del sistema(Almecenar error ocurridos en la Capa de Controlador y Modelo)
-
-Implementar
+<br>
+->Multi-idioma a nivel de Base de datos y contenidos estáticos
+<br>
+->Modulo de creación de páginas estáticas almacenadas en la BD con opciones de traducción
+<br>
+->Bitácora de Registros de visitas y eventos del sistema (Almacenar errores ocurridos en la Capa Controlador y Modelo)
+Implementación 
+<br>
 ->Levantar en tu maquina local o servidor Apache con php >5 y mysql
 ->En Windows
 	->En httpd.conf habilitar el modulo mod_rewrite.so
@@ -27,5 +30,6 @@ Implementar
 		->public/ckeditor/kcfinder/upload
 		->public/img
 		->tmp
+
 
 
