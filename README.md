@@ -13,7 +13,7 @@ Instalar en una maquina local o servidor, Apache con php >5 y Mysql.
 ### Requisitos
 #### En Windows 
 * Instalar XAMP o WAMP.
-* En httpd.conf habilitar el "modulo mod_rewrite.so".
+* En `httpd.conf` habilitar el "modulo mod_rewrite.so".
 ```bash
 	LoadModule rewrite_module modules/mod_rewrite.so <br>
 ```
