@@ -45,12 +45,17 @@ Instalar en una maquina local o servidor, Apache con php >5 y Mysql.
 		sudo apt-get install php5-gd
 ```
 * Dar permisos de escritura a las siguientes carpetas.
-** public/ckeditor/kcfinder/upload
-** public/img
-** tmp
+  - public/ckeditor/kcfinder/upload
+  - public/img
+  - tmp
 
 ### Instalar Framework
 * Descargar código fuente y copiarla en la carpeta del proyecto en  apache `/var/www/html` o `C:\xampp\htdocs`.
 * Crear base de datos con el nombre de mvc_php con `Engine=InnoDB`, `Database charset=utf8` y `Database collation=utf8_general_ci`.
 * Importar en la base de datos creada el archivo `bd.sql` de la carpeta [bd](bd) del proyecto.
-* Entrar abre un navegador web, ingresa a `localhost/framework_mvc_php_multi-idioma` y se debe mostrar la página de inicio de Framework. 
+* Abre un navegador web, ingresa a `localhost/framework_mvc_php_multi-idioma` y se debe mostrar la página de inicio del Framework. 
+* Datos de inicio de sesion:
+  - Usuario: admin
+  - Contraseña: admin@
+
+
