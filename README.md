@@ -28,7 +28,7 @@ Instalar en una maquina local o servidor, Apache con php >5 y Mysql.
 ``` 
 
 #### En Linux
-* Seguir los paso en [como-instalar-linux-apache-mysql-php-lamp-en-ubuntu](https://www.digitalocean.com/community/tutorials/como-instalar-linux-apache-mysql-php-lamp-en-ubuntu-16-04-es) para instalar Apache y Mysql. 
+* Seguir los pasos en [como-instalar-linux-apache-mysql-php-lamp-en-ubuntu](https://www.digitalocean.com/community/tutorials/como-instalar-linux-apache-mysql-php-lamp-en-ubuntu-16-04-es) para instalar Apache y Mysql. 
 * Seguir los pasos en [how-to-enable-mod_rewrite-in-apache2-on-debian-ubuntu](http://xmodulo.com/how-to-enable-mod_rewrite-in-apache2-on-debian-ubuntu.html).
 * Agregar en el Virtual Host  el siguiente cod: ver [how-to-set-up-mod_rewrite-for-apache-on-ubuntu](https://www.digitalocean.com/community/tutorials/how-to-set-up-mod_rewrite-for-apache-on-ubuntu-14-04). 
 * Configurar el directorio de la aplicación en `httpd.conf`:
