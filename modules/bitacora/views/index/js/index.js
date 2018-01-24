@@ -2,8 +2,11 @@ $(document).on('ready', function () {
     $('body').on('click', '.pagina', function () {
         paginacion($(this).attr("pagina"), $(this).attr("nombre"), $(this).attr("parametros"));
     });
-    var paginacion = function (pagina, nombrelista, datos) {
-        var pagina = 'pagina=' + pagina;
+    $('body').on('change', '.s_filas', function () {
+        paginacion($(this).attr("pagina"), $(this).attr("nombre"), $(this).attr("parametros"));
+    });
+    var paginacion = function (pagina,nombrelista, datos) {
+        var pagina = {'pagina':pagina,'filas':$("#s_filas_"+nombrelista).val()};
 
         $.post(_root_ + 'bitacora/index/_paginacion_' + nombrelista + '/' + datos, pagina, function (data) {
             $("#" + nombrelista).html('');

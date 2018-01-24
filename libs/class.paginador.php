@@ -53,6 +53,7 @@ class Paginador {
         $paginacion = array();
         $paginacion['actual'] = $pagina;
         $paginacion['total'] = $total;
+        $paginacion['limite'] = $limite;
 
         //-----------------------------
         $this->_numero_pagina = $pagina * $limite - ($limite - 1);
