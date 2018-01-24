@@ -5,7 +5,7 @@
     {if $_acl->permiso("editar_rol")}
         <div class="panel panel-default">
             <div class="panel-heading jsoftCollap">
-                <h3 aria-expanded="false" data-toggle="collapse" href="#collapse3" class="panel-title collapsed"><i style="float:right"class="fa fa-ellipsis-v"></i><i class="fa fa-key"></i>&nbsp;&nbsp;<strong>{$lenguaje.permisos_nuevo_titulo}</strong></h3>
+                <h3 aria-expanded="false" data-toggle="collapse" href="#collapse3" class="panel-title collapsed"><i style="float:right" class="fa fa-ellipsis-v"></i><i class="fa fa-key"></i>&nbsp;&nbsp;<strong>{$lenguaje.permisos_nuevo_titulo}</strong></h3>
             </div>
             <div style="height: 0px;" aria-expanded="false" id="collapse3" class="panel-collapse collapse">
                 <div class="panel-body" id="cont-form" style=" margin: 15px">
@@ -20,6 +20,22 @@
                             <label class="col-lg-2 control-label">{$lenguaje.label_clave} (*): </label>
                             <div class="col-lg-10">
                                 <input  class="form-control" type="text" name="key_" id="key_" placeholder="{$lenguaje.label_clave}" required="" />
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-2 control-label">{$lenguaje.label_modulo} : </label>
+                            <div class="col-lg-4">
+                                <select class="form-control" name="modulo_" id="modulo_">
+                                    <option value="0" >{$lenguaje.select_option_seleccione}</option>
+                                    {if isset($modulos) && count($modulos)}
+                                    {foreach item=m from=$modulos}
+                                        <option value="{$m.Mod_IdModulo}" >{$m.Mod_Nombre}</option>
+                                    {/foreach}
+                                    {/if}
+                                </select>
+                            </div>
+                            <div class="col-lg-1">
+                                <button class="btn btn-success" type="button" id="bt_agregarModulo" name="bt_agregarModulo" data-toggle="tooltip" data-placement="bottom" title="{$lenguaje.label_crear_modulo}"><i class="glyphicon glyphicon-plus-sign"> </i></button>
                             </div>
                         </div>
                         <div class="form-group">
@@ -53,6 +69,7 @@
                         <tr>
                             <th style=" text-align: center">{$lenguaje.label_n}</th>
                             <th >{$lenguaje.label_permiso} </th>
+                            <th >Módulo</th>
                             <th style=" text-align: center">{$lenguaje.label_clave}</th>
                             {if $_acl->permiso("editar_rol")}
                             <th style=" text-align: center">{$lenguaje.label_opciones}</th>
@@ -61,7 +78,8 @@
                         {foreach item=rl from=$permisos}
                             <tr>
                                 <td style=" text-align: center">{$numeropagina++}</td>
-                                <td>{$rl.Per_Permiso}</td>
+                                <td>{$rl.Per_Nombre}</td>
+                                <td>{$rl.Mod_Nombre|default:" - "}</td>
                                 <td style=" text-align: center">{$rl.Per_Ckey}</td>
                                 {if $_acl->permiso("editar_rol")}
                                 <td style=" text-align: center">

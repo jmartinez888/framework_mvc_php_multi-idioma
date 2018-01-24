@@ -306,7 +306,7 @@ class indexController extends aclController
                 $rowCount1 = $this->_aclm->eliminarPermisosRol($this->filtrarInt($idPermiso));
                 $rowCount2 = $this->_aclm->eliminarPermisosUsuario($this->filtrarInt($idPermiso));
                 $rowCount3 = $this->_aclm->eliminarPermiso($this->filtrarInt($idPermiso));
-                echo $rowCount3;//exit;
+                // echo $rowCount3;//exit;
 
                 if($rowCount3)
                 {
@@ -360,18 +360,21 @@ class indexController extends aclController
         }
         $nombre = $this->getSql('nombre');
         $pagina = $this->getInt('pagina');
-        
+
         $paginador = new Paginador();
         
         if ($this->botonPress("bt_guardarPermiso")) 
         {
               $this->nuevo_permiso();                
         }
-        
-        $this->_view->assign('permisos', $paginador->paginar($this->_aclm->getPermisos(), "listarPermisos", "$nombre", $pagina, 25));
+
+        $arrayRowCount = $this->_aclm->getPermisosRowCount();
+        $this->_view->assign('modulos', $this->_aclm->getModulos(0,0));
+        $this->_view->assign('permisos', $this->_aclm->getPermisos($pagina,CANT_REG_PAG));
+
+        $paginador->paginar( $arrayRowCount['CantidadRegistros'],"listarPermisos", "$nombre", $pagina, CANT_REG_PAG, true);
 
         $this->_view->assign('numeropagina', $paginador->getNumeroPagina());
-        //$this->_view->assign('cantidadporpagina',$registros);
         $this->_view->assign('paginacionPermisos', $paginador->getView('paginacion_ajax'));
         
         $this->_view->assign('titulo', 'Administracion de permisos');
@@ -382,7 +385,6 @@ class indexController extends aclController
     {
         //$this->validarUrlIdioma();
         $pagina = $this->getInt('pagina');
-        //$registros = $this->getInt('registros');
 
         $condicion = "";
         //$nombre = $this->getSql('nombre');
@@ -392,8 +394,12 @@ class indexController extends aclController
         }
 
         $paginador = new Paginador();
+        $arrayRowCount = $this->_aclm->getPermisosRowCount();
+        
+        $this->_view->assign('permisos', $this->_aclm->getPermisos($pagina,CANT_REG_PAG));
 
-        $this->_view->assign('permisos', $paginador->paginar($this->_aclm->getPermisos($condicion), "listarPermisos", "$nombre", $pagina, 25));
+        $paginador->paginar( $arrayRowCount['CantidadRegistros'],"listarPermisos", "$nombre", $pagina, CANT_REG_PAG, true);
+
 
         $this->_view->assign('numeropagina', $paginador->getNumeroPagina());
         //$this->_view->assign('cantidadporpagina',$registros);
@@ -409,12 +415,16 @@ class indexController extends aclController
 
         if ($nombre) 
         {
-            $condicion .= " where Per_Permiso liKe '%$nombre%' ";
+            $condicion .= " WHERE Per_Permiso LIKE '%$nombre%' ";
         }
 
         $paginador = new Paginador();
 
-        $this->_view->assign('permisos', $paginador->paginar($this->_aclm->getPermisos($condicion), "listarPermisos", "$nombre", false, 25));
+        $arrayRowCount = $this->_aclm->getPermisosRowCount();
+        
+        $this->_view->assign('permisos', $this->_aclm->getPermisos($pagina,CANT_REG_PAG));
+
+        $paginador->paginar( $arrayRowCount['CantidadRegistros'],"listarPermisos", "$nombre", $pagina, CANT_REG_PAG, true);
 
         $this->_view->assign('numeropagina', $paginador->getNumeroPagina());
         $this->_view->assign('paginacionPermisos', $paginador->getView('paginacion_ajax'));
@@ -451,7 +461,8 @@ class indexController extends aclController
         {
             $idPermiso = $this->_aclm->insertarPermiso(
                 $this->getSql('permiso_'), 
-                $this->getAlphaNum('key_')
+                $this->getAlphaNum('key_'),
+                $this->getInt('modulo_')
                 );
         }
             

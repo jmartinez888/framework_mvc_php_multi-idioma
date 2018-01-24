@@ -4,6 +4,7 @@
         <tr>
             <th style=" text-align: center">{$lenguaje.label_n}</th>
             <th >{$lenguaje.label_permiso} </th>
+            <th >Modulo</th>
             <th style=" text-align: center">{$lenguaje.label_clave}</th>
             {if $_acl->permiso("editar_rol")}
             <th style=" text-align: center">{$lenguaje.label_opciones}</th>
@@ -12,7 +13,8 @@
         {foreach item=rl from=$permisos}
             <tr>
                 <td style=" text-align: center">{$numeropagina++}</td>
-                <td>{$rl.Per_Permiso}</td>
+                <td>{$rl.Per_Nombre}</td>
+                <td>{$rl.Mod_Nombre|default:" - "}</td>
                 <td style=" text-align: center">{$rl.Per_Ckey}</td>
                 {if $_acl->permiso("editar_rol")}
                 <td style=" text-align: center">
