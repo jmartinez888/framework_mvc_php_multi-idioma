@@ -57,5 +57,7 @@ Instalar en una maquina local o servidor, Apache con php >5 y Mysql.
 * Datos de inicio de sesion:
   - Usuario: admin
   - Contraseña: admin@
+  
+Test.
 
 
