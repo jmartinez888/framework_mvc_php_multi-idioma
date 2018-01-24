@@ -27,7 +27,7 @@ class Paginador {
         $this->_lenguaje = $this->LoadLenguaje();
     }
 
-    public function paginar($query, $nombrelista, $parametros, $pagina = false, $limite = false, $paginacion = false) {
+    public function paginar($query, $nombrelista, $parametros, $pagina = false, $limite = false, $paginacionSql = false) {
         $this->_nombrelista = $nombrelista;
         $this->_parametros = $parametros;
         if ($limite && is_numeric($limite)) {
@@ -44,11 +44,16 @@ class Paginador {
             $inicio = 0;
         }
 
-
-        $registros = count($query);
+        if (!$paginacionSql) {
+            $registros = count($query);
+        } else{
+            $registros = $query;
+        }
+        
         $total = ceil($registros / $limite);
-        $this->_datos = array_slice($query, $inicio, $limite);
-
+        if (!$paginacionSql) {
+            $this->_datos = array_slice($query, $inicio, $limite);
+        }
 
         $paginacion = array();
         $paginacion['actual'] = $pagina;
@@ -89,7 +94,9 @@ class Paginador {
         $this->_paginacion = $paginacion;
         $this->_rangoPaginacion($paginacion);
 
-        return $this->_datos;
+        if (!$paginacionSql) {
+            return $this->_datos;
+        }
     }
 
     private function _rangoPaginacion($limite = false) {
