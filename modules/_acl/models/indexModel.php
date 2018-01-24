@@ -102,10 +102,10 @@ class indexModel extends Model
     
     
     
-    public function editarPermiso($Per_IdPermiso,$Per_Nombre,$Per_Ckey) {
+    public function editarPermiso($Per_IdPermiso,$Per_Permiso,$Per_Ckey) {
         try{
             $permiso = $this->_db->query(
-                "UPDATE permisos SET Per_Nombre = '$Per_Nombre', Per_Ckey = '$Per_Ckey' where Per_IdPermiso = $Per_IdPermiso"
+                "UPDATE permisos SET Per_Permiso = '$Per_Permiso', Per_Ckey = '$Per_Ckey' where Per_IdPermiso = $Per_IdPermiso"
             );
             return $permiso->rowCount(PDO::FETCH_ASSOC);
         } catch (PDOException $exception) {
@@ -244,11 +244,11 @@ class indexModel extends Model
         $permisoID = (int) $permisoID;
         try{
             $key = $this->_db->query(
-                    "SELECT Per_Nombre FROM permisos WHERE Per_IdPermiso = $permisoID"
+                    "SELECT Per_Permiso FROM permisos WHERE Per_IdPermiso = $permisoID"
                     );
 
             $key = $key->fetch();
-            return $key['Per_Nombre'];
+            return $key['Per_Permiso'];
         } catch (PDOException $exception) {
             $this->registrarBitacora("acl(indexModel)", "getPermisoNombre", "Error Model", $exception);
             return $exception->getTraceAsString();
@@ -268,7 +268,7 @@ class indexModel extends Model
                 $data[$permisos[$i]['Per_Ckey']] = array(
                     'key' => $permisos[$i]['Per_Ckey'],
                     'valor' => 'x',
-                    'nombre' => $permisos[$i]['Per_Nombre'],
+                    'nombre' => $permisos[$i]['Per_Permiso'],
                     'id' => $permisos[$i]['Per_IdPermiso']
                 );
             }
@@ -296,43 +296,13 @@ class indexModel extends Model
         }
     }
     
-    //UTILIZO
-    public function getPermisos($pagina,$registrosXPagina)
+    public function getPermisos($condicion = '')
     {
         try{
-            $sql = "call s_s_listar_permisos_con_modulo(?,?)";
-            $result = $this->_db->prepare($sql);
-            $result->bindParam(1, $pagina, PDO::PARAM_INT);
-            $result->bindParam(2, $registrosXPagina, PDO::PARAM_INT);
-            $result->execute();
-            return $result->fetchAll(PDO::FETCH_ASSOC);
+            $permisos = $this->_db->query("SELECT * FROM permisos $condicion");
+            return $permisos->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $exception) {
             $this->registrarBitacora("acl(indexModel)", "getPermisos", "Error Model", $exception);
-            return $exception->getTraceAsString();
-        }
-    }
-
-    public function getModulos(){
-        try{
-            $sql = "call s_s_listar_modulos()";
-            $result = $this->_db->prepare($sql);
-            $result->execute();
-            return $result->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $exception) {
-            $this->registrarBitacora("acl(indexModel)", "getModulos", "Error Model", $exception);
-            return $exception->getTraceAsString();
-        }
-    }
-
-    public function getPermisosRowCount($condicion = "")
-    {
-        try{
-            $sql = " SELECT COUNT(p.Per_IdPermiso) AS CantidadRegistros FROM permisos p LEFT JOIN modulo m ON p.Mod_IdModulo = m.Mod_IdModulo  $condicion ";
-            $result = $this->_db->prepare($sql);
-            $result->execute();
-            return $result->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $exception) {
-            $this->registrarBitacora("acl(indexModel)", "getPermisosRowCount", "Error Model", $exception);
             return $exception->getTraceAsString();
         }
     }
@@ -340,7 +310,7 @@ class indexModel extends Model
     public function verificarPermiso($permiso)
     {
         try{
-            $permiso = $this->_db->query("SELECT * FROM permisos WHERE Per_Nombre = '$permiso'");
+            $permiso = $this->_db->query("SELECT * FROM permisos WHERE Per_Permiso = '$permiso'");
             return $permiso->fetch();
         } catch (PDOException $exception) {
             $this->registrarBitacora("acl(indexModel)", "verificarPermiso", "Error Model", $exception);
@@ -464,16 +434,14 @@ class indexModel extends Model
         }
     }
 
-    //utilizo
-    public function insertarPermiso($iPer_Nombre, $iPer_Ckey, $iMod_Modulo = "", $iIdi_IdIdioma="")
+    public function insertarPermiso($iPer_Permiso, $iPer_Ckey, $iIdi_IdIdioma="")
     {
         try {            
-            $sql = "call s_i_permisos(?,?,?,?)";
+            $sql = "call s_i_permisos(?,?,?)";
             $result = $this->_db->prepare($sql);
-            $result->bindParam(1, $iPer_Nombre, PDO::PARAM_STR);
+            $result->bindParam(1, $iPer_Permiso, PDO::PARAM_STR);
             $result->bindParam(2, $iPer_Ckey, PDO::PARAM_STR);
-            $result->bindParam(3, empty($iMod_Modulo) ? null : $iMod_Modulo, PDO::PARAM_NULL | PDO::PARAM_INT);            
-            $result->bindParam(4, empty($iIdi_IdIdioma) ? null : $iIdi_IdIdioma, PDO::PARAM_NULL | PDO::PARAM_STR);
+            $result->bindParam(3, empty($iIdi_IdIdioma) ? null : $iIdi_IdIdioma, PDO::PARAM_NULL | PDO::PARAM_STR);
            
             $result->execute();
             return $result->fetch();
