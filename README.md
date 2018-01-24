@@ -58,6 +58,4 @@ Instalar en una maquina local o servidor, Apache con php >5 y Mysql.
   - Usuario: admin
   - Contraseña: admin@
 
-Hola chaleco
-
 
