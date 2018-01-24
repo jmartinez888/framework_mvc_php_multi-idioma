@@ -9,13 +9,15 @@
  * Modificado por @vicercavi | Rodolfo Cardenas
  */
 
-define('BASE_URL', 'http://'.$_SERVER['SERVER_NAME'].'/framework_mvc_php_multidioma/');
+
+define('BASE_URL', 'http://'.$_SERVER['SERVER_NAME'].'/framework_mvc_php_multi-idioma/');
 define('DEFAULT_CONTROLLER', 'index');
 define('DEFAULT_LAYOUT', 'backend');
 define('LAYOUT_FRONTEND', 'frontend');
-define('ROOT_ARCHIVO_FISICO',$_SERVER['DOCUMENT_ROOT']."/framework_mvc_php_multidioma/files/");
-define('URL_ARCHIVO_FISICO',BASE_URL."archivosFisicos/");
+define('ROOT_ARCHIVO_FISICO',$_SERVER['DOCUMENT_ROOT'].'/framework_mvc_php_multi-idioma/files/');
+define('URL_ARCHIVO_FISICO',BASE_URL.'archivosFisicos/');
 define('LENGUAJE', 'es');
+define('CANT_REG_PAG', 25);
 
 define('APP_NAME', 'PHP MVC');
 define('APP_SLOGAN', 'Framework MVC en PHP');
