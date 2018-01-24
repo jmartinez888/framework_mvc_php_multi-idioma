@@ -33,16 +33,17 @@ class indexController extends bitacoraController {
         //Fin Listar año
         $_SESSION['Bitacora'] = $listaBitacora;
         //print_r($listaBitacora);exit;
-        $this->_view->assign('bitacora', $paginador->paginar($listaBitacora, "divListarBitacoraErrores", "$iano/$imes", $pagina, 25));
+        $this->_view->assign('bitacora', $paginador->paginar($listaBitacora, "divListarBitacoraErrores", "$iano/$imes", $pagina, 20));
         $this->_view->assign('anoLista',$listAno);
         $this->_view->assign('numeropagina', $paginador->getNumeroPagina());        
-        $this->_view->assign('paginacion', $paginador->getView('paginacion_ajax'));
+        $this->_view->assign('paginacion', $paginador->getView('paginacion_ajax_s_filas'));
         $this->_view->assign('titulo', 'Lista de Errores');
         $this->_view->renderizar('index', 'bitacora');
     }
     public function _paginacion_divListarBitacoraErrores($iano = 'todos', $imes = 'todos') {
         $this->_view->getLenguaje("index_inicio");
         $pagina = $this->getInt('pagina');
+        $filas=$this->getInt('filas');
         $registros  = $this->getInt('registros');
         
         if($iano=='todos'){
@@ -58,9 +59,9 @@ class indexController extends bitacoraController {
         $_SESSION['Bitacora'] = $this->_bitacora->getListarBitacoraErrores($ano, $mes);
         $paginador = new Paginador();
 
-        $this->_view->assign('bitacora', $paginador->paginar($_SESSION['Bitacora'], "divListarBitacoraErrores", "$iano/$imes", $pagina, 25));
+        $this->_view->assign('bitacora', $paginador->paginar($_SESSION['Bitacora'], "divListarBitacoraErrores", "$iano/$imes", $pagina, $filas));
         $this->_view->assign('numeropagina', $paginador->getNumeroPagina());
-        $this->_view->assign('paginacion', $paginador->getView('paginacion_ajax'));
+        $this->_view->assign('paginacion', $paginador->getView('paginacion_ajax_s_filas'));
         $this->_view->renderizar('ajax/divListarBitacoraErrores', 'bitacora', true);
     }
     
@@ -83,9 +84,9 @@ class indexController extends bitacoraController {
         $_SESSION['Bitacora'] = $this->_bitacora->getListarBitacoraErrores($ano, $mes);
         $paginador = new Paginador();
         
-        $this->_view->assign('bitacora', $paginador->paginar($_SESSION['Bitacora'], "divListarBitacoraErrores", "$iano/$imes", $pagina, 25));
+        $this->_view->assign('bitacora', $paginador->paginar($_SESSION['Bitacora'], "divListarBitacoraErrores", "$iano/$imes", $pagina, 20));
         $this->_view->assign('numeropagina', $paginador->getNumeroPagina());        
-        $this->_view->assign('paginacion', $paginador->getView('paginacion_ajax'));
+        $this->_view->assign('paginacion', $paginador->getView('paginacion_ajax_s_filas'));
         $this->_view->renderizar('ajax/divListarBitacoraErrores', 'bitacora', true);
     }
     
@@ -111,10 +112,10 @@ class indexController extends bitacoraController {
         
         $paginador = new Paginador();
         
-        $this->_view->assign('ErroresComunes', $paginador->paginar($this->_bitacora->getObtenerErroresMasComunes($ano, $mes), "divListarErroresComunes", "$iano/$imes", $pagina, 25));
+        $this->_view->assign('ErroresComunes', $paginador->paginar($this->_bitacora->getObtenerErroresMasComunes($ano, $mes), "divListarErroresComunes", "$iano/$imes", $pagina, 20));
         $this->_view->assign('numeropagina', $paginador->getNumeroPagina());        
         $this->_view->assign('titulo',$titulo.' ('.$til_ano.'/'.$til_mes.')');
-        $this->_view->assign('paginacion', $paginador->getView('paginacion_ajax'));
+        $this->_view->assign('paginacion', $paginador->getView('paginacion_ajax_s_filas'));
         $this->_view->renderizar('ajax/ErroresComunes', 'bitacora', true);
     }
     

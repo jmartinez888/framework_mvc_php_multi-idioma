@@ -214,7 +214,14 @@ class ACL
 //        {
 //          $url="";  
 //        }
-        header("location:" . BASE_URL . "error/access/5050/$url");
+        if(Session::get('autenticado'))
+        {
+           header("location:" . BASE_URL . "error/access/5050/$url");
+            return;
+        }else{
+            header("location:" . BASE_URL . "usuarios/login/index/$url");
+        }
+        
         exit;
     }
     public function autenticado()
@@ -235,7 +242,7 @@ class ACL
          // $url="";  
         //}
         
-        header("location:" . BASE_URL . "error/access/5050/$url");
+        header("location:" . BASE_URL . "usuarios/login/index/$url");
         exit;
     }
 }
