@@ -145,6 +145,10 @@ $lenguaje["permisos_buscar_tabla_titulo"]="LISTA DE PERMISSÕES";
 $lenguaje["text_buscar_permisos"]="Pesquisa licença";
 $lenguaje["label_permiso"]="Permissão";
 $lenguaje["label_clave"]="Chave";
+//nuevos jm
+$lenguaje["label_modulo"]="Módulo";
+$lenguaje["label_crear_modulo"]="Criar Módulo";
+
 
 $lenguaje["bitacora_label_titulo"]="Bitácora: MAIS COMUM ERROS DO SISTEMA INTEGRADA";
 $lenguaje["bitacora_grafico_titulo"]="GRÁFICO";
