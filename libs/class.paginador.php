@@ -2,11 +2,11 @@
 
 /*
  * + --------------------------------------------------------- +
- * |  Software:	Paginador - clase PHP para paginar registros   |
- * |   Versi�n:	1.0											   |
- * |  Licencia:	Distribuido de forma libre					   |
- * |     Autor:	Jaisiel Delance								   |
- * | Sitio Web:	http://www.dlancedu.com						   |
+ * |  Software: Paginador - clase PHP para paginar registros   |
+ * |   Versi�n: 1.0                                            |
+ * |  Licencia: Distribuido de forma libre                     |
+ * |     Autor: Jaisiel Delance                                |
+ * | Sitio Web: http://www.dlancedu.com                        |
  * + --------------------------------------------------------- +
  *
  */
@@ -27,7 +27,7 @@ class Paginador {
         $this->_lenguaje = $this->LoadLenguaje();
     }
 
-    public function paginar($query, $nombrelista, $parametros, $pagina = false, $limite = false, $paginacion = false) {
+    public function paginar($query, $nombrelista, $parametros, $pagina = false, $limite = false, $paginacionSql = false) {
         $this->_nombrelista = $nombrelista;
         $this->_parametros = $parametros;
         if ($limite && is_numeric($limite)) {
@@ -44,17 +44,23 @@ class Paginador {
             $inicio = 0;
         }
 
+        if (!$paginacionSql) {
+            $registros = count($query);
+        } else{
+            $registros = $query;
+        }
 
-        $registros = count($query);
         $total = ceil($registros / $limite);
-        $this->_datos = array_slice($query, $inicio, $limite);
+        if (!$paginacionSql) {
+            $this->_datos = array_slice($query, $inicio, $limite);
+        }
+        
 
 
         $paginacion = array();
         $paginacion['actual'] = $pagina;
         $paginacion['total'] = $total;
-        $paginacion['limite'] = $limite;
-
+        $paginacion['limite'] = $limite; ///
         //-----------------------------
         $this->_numero_pagina = $pagina * $limite - ($limite - 1);
 
@@ -89,7 +95,9 @@ class Paginador {
         $this->_paginacion = $paginacion;
         $this->_rangoPaginacion($paginacion);
 
-        return $this->_datos;
+        if (!$paginacionSql) {
+            return $this->_datos;
+        }
     }
 
     private function _rangoPaginacion($limite = false) {

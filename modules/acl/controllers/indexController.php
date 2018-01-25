@@ -390,7 +390,7 @@ class indexController extends aclController
         //$nombre = $this->getSql('nombre');
         if ($nombre) 
         {
-            $condicion .= " where Per_Permiso liKe '%$nombre%' ";
+            $condicion .= " where Per_Nombre liKe '%$nombre%' ";
         }
 
         $paginador = new Paginador();
@@ -415,7 +415,7 @@ class indexController extends aclController
 
         if ($nombre) 
         {
-            $condicion .= " WHERE Per_Permiso LIKE '%$nombre%' ";
+            $condicion .= " WHERE Per_Nombre LIKE '%$nombre%' ";
         }
 
         $paginador = new Paginador();
