@@ -2,11 +2,11 @@
 
 /*
  * + --------------------------------------------------------- +
- * |  Software:	Paginador - clase PHP para paginar registros   |
- * |   Versi�n:	1.0											   |
- * |  Licencia:	Distribuido de forma libre					   |
- * |     Autor:	Jaisiel Delance								   |
- * | Sitio Web:	http://www.dlancedu.com						   |
+ * |  Software: Paginador - clase PHP para paginar registros   |
+ * |   Versi�n: 1.0                                            |
+ * |  Licencia: Distribuido de forma libre                     |
+ * |     Autor: Jaisiel Delance                                |
+ * | Sitio Web: http://www.dlancedu.com                        |
  * + --------------------------------------------------------- +
  *
  */
@@ -58,7 +58,7 @@ class Paginador {
         $paginacion = array();
         $paginacion['actual'] = $pagina;
         $paginacion['total'] = $total;
-        $paginacion['limite'] = $limite;
+        $paginacion['limite'] = $limite; ///
 
         //-----------------------------
         $this->_numero_pagina = $pagina * $limite - ($limite - 1);
@@ -70,10 +70,10 @@ class Paginador {
         }
 
 
-        $paginacion['total_registro'] = $registros;
+        $paginacion['total_registros'] = $registros;
 
         //Mejorar...........
-        $this->_control_paginacion = $paginacion['actual_registro'] . " de " . $paginacion['total_registro'];
+        $this->_control_paginacion = $paginacion['actual_registro'] . " de " . $paginacion['total_registros'];
         //---------------------------------
         if ($pagina > 1) {
             $paginacion['primero'] = 1;

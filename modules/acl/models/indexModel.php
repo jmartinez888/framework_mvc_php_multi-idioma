@@ -132,27 +132,45 @@ class indexModel extends Model
             $this->registrarBitacora("acl(indexModel)", "cambiarEstadoRole", "Error Model", $exception);
             return $exception->getTraceAsString();
         }
-    }/*
-    public function cambiarEstadoPermisos($Per_IdPermiso, $estado)
+    }
+    //util
+    public function cambiarEstadoPermisos($Per_IdPermiso, $Per_Estado)
     {
         try{
-            if($estado==0)
+            if($Per_Estado==0)
             {
-                $permiso = $this->_db->query(
-                "UPDATE permisos SET Per_Estado = 1 where Per_IdPermiso = $Per_IdPermiso"
-                );
+
+                $sql = "call s_u_cambiar_estado_permiso(?,1)";
+                $result = $this->_db->prepare($sql);
+                $result->bindParam(1, $Per_IdPermiso, PDO::PARAM_INT);
+                $result->execute();
+
+                return $result->rowCount(PDO::FETCH_ASSOC);
+                
+                // $permiso = $this->_db->query(
+                // " UPDATE permisos SET Per_Estado = 1 where Per_IdPermiso = $Per_IdPermiso "
+                // );
             }
-            if($estado==1)
+            if($Per_Estado==1)
             {
-                $permiso = $this->_db->query(
-                "UPDATE permisos SET Per_Estado = 0 where Per_IdPermiso = $Per_IdPermiso"
-                );
+
+                $sql = "call s_u_cambiar_estado_permiso(?,0)";
+                $result = $this->_db->prepare($sql);
+                $result->bindParam(1, $Per_IdPermiso, PDO::PARAM_INT);
+                $result->execute();
+
+                return $result->rowCount(PDO::FETCH_ASSOC);
+
+                // $permiso = $this->_db->query(
+                // " UPDATE permisos SET Per_Estado = 0 where Per_IdPermiso = $Per_IdPermiso "
+                // );
             }
+
         } catch (PDOException $exception) {
             $this->registrarBitacora("acl(indexModel)", "cambiarEstadoPermisos", "Error Model", $exception);
             return $exception->getTraceAsString();
         }
-    }*/
+    }
     public function getRoles($condicion = '')
     {
         try{
@@ -296,6 +314,7 @@ class indexModel extends Model
         }
     }
     
+
     //UTILIZO
     public function getPermisos($pagina,$registrosXPagina)
     {
@@ -337,6 +356,51 @@ class indexModel extends Model
         }
     }
     
+    //Util
+    public function getPermisosRowCount($condicion = "")
+    {
+        try{
+            $sql = " SELECT COUNT(p.Per_IdPermiso) AS CantidadRegistros FROM permisos p LEFT JOIN modulo m ON p.Mod_IdModulo = m.Mod_IdModulo  $condicion ";
+            $result = $this->_db->prepare($sql);
+            $result->execute();
+            return $result->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $exception) {
+            $this->registrarBitacora("acl(indexModel)", "getPermisosRowCount", "Error Model", $exception);
+            return $exception->getTraceAsString();
+        }
+    }
+    //Util
+    public function getPermisosCondicion($pagina,$registrosXPagina,$condicion = "")
+    {
+        try{
+            $registroInicio = 0;
+            if ($pagina > 0) {
+                $registroInicio = ($pagina - 1) * $registrosXPagina;
+                
+            }
+            $sql = " SELECT p.*, m.Mod_Nombre FROM permisos p
+                LEFT JOIN modulo m ON p.Mod_IdModulo = m.Mod_IdModulo  $condicion 
+                LIMIT $registroInicio, $registrosXPagina ";
+            $result = $this->_db->query($sql);
+            return $result->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $exception) {
+            $this->registrarBitacora("acl(indexModel)", "getPermisos", "Error Model", $exception);
+            return $exception->getTraceAsString();
+        }
+    }
+    //Util
+    public function getModulos(){
+        try{
+            $sql = "call s_s_listar_modulos()";
+            $result = $this->_db->prepare($sql);
+            $result->execute();
+            return $result->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $exception) {
+            $this->registrarBitacora("acl(indexModel)", "getModulos", "Error Model", $exception);
+            return $exception->getTraceAsString();
+        }
+    }
+    //util
     public function verificarPermiso($permiso)
     {
         try{
@@ -367,6 +431,7 @@ class indexModel extends Model
             return $exception->getTraceAsString();
         }
     }
+    //util
     public function verificarKey($ckey)
     {
         try{
