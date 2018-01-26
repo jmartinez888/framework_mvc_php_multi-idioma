@@ -54,8 +54,6 @@ class Paginador {
         if (!$paginacionSql) {
             $this->_datos = array_slice($query, $inicio, $limite);
         }
-        
-
 
         $paginacion = array();
         $paginacion['actual'] = $pagina;
