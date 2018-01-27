@@ -17,7 +17,7 @@ define('LAYOUT_FRONTEND', 'frontend');
 define('ROOT_ARCHIVO_FISICO',$_SERVER['DOCUMENT_ROOT'].'/framework_mvc_php_multi-idioma/files/');
 define('URL_ARCHIVO_FISICO',BASE_URL.'archivosFisicos/');
 define('LENGUAJE', 'es');
-define('CANT_REG_PAG', 25);
+define('CANT_REG_PAG', 2);
 
 define('APP_NAME', 'PHP MVC');
 define('APP_SLOGAN', 'Framework MVC en PHP');

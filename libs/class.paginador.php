@@ -49,7 +49,7 @@ class Paginador {
         } else{
             $registros = $query;
         }
-
+        
         $total = ceil($registros / $limite);
         if (!$paginacionSql) {
             $this->_datos = array_slice($query, $inicio, $limite);
@@ -59,6 +59,7 @@ class Paginador {
         $paginacion['actual'] = $pagina;
         $paginacion['total'] = $total;
         $paginacion['limite'] = $limite; ///
+
         //-----------------------------
         $this->_numero_pagina = $pagina * $limite - ($limite - 1);
 
@@ -69,10 +70,10 @@ class Paginador {
         }
 
 
-        $paginacion['total_registro'] = $registros;
+        $paginacion['total_registros'] = $registros;
 
         //Mejorar...........
-        $this->_control_paginacion = $paginacion['actual_registro'] . " de " . $paginacion['total_registro'];
+        $this->_control_paginacion = $paginacion['actual_registro'] . " de " . $paginacion['total_registros'];
         //---------------------------------
         if ($pagina > 1) {
             $paginacion['primero'] = 1;
