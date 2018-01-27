@@ -47,3 +47,4 @@
 {else}
     {$lenguaje.no_registros}
 {/if}
+
