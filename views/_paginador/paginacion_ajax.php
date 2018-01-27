@@ -4,7 +4,7 @@
     <ul class="pagination" >
         <?php if($this->_paginacion['primero']): ?>
 
-            <li><a class="pagina" nombre="<?php echo $this->_nombrelista;?>" parametros="<?php echo $this->_parametros;?>"  pagina="<?php echo $this->_paginacion['primero']; ?>" total_registros="<?php echo $this->_paginacion['total_registros']; ?>" href="javascript:void(0);">&Lt;</a></li>
+            <li><a class="pagina" nombre="<?php echo $this->_nombrelista;?>" parametros="<?php echo $this->_parametros;?>"  pagina="<?php echo $this->_paginacion['primero']; ?>" href="javascript:void(0);">&Lt;</a></li>
 
         <?php else: ?>
 
@@ -14,7 +14,7 @@
 
         <?php if($this->_paginacion['anterior']): ?>
 
-            <li><a class="pagina" nombre="<?php echo $this->_nombrelista;?>" parametros="<?php echo $this->_parametros;?>"  pagina="<?php echo $this->_paginacion['anterior']; ?>" total_registros="<?php echo $this->_paginacion['total_registros']; ?>" href="javascript:void(0);">&lt;</a></li>
+            <li><a class="pagina" nombre="<?php echo $this->_nombrelista;?>" parametros="<?php echo $this->_parametros;?>"  pagina="<?php echo $this->_paginacion['anterior']; ?>" href="javascript:void(0);">&lt;</a></li>
 
         <?php else: ?>
 
@@ -31,7 +31,7 @@
             <?php else: ?>
 
                 <li>
-                    <a class="pagina" nombre="<?php echo $this->_nombrelista;?>" parametros="<?php echo $this->_parametros;?>"  pagina="<?php echo $this->_paginacion['rango'][$i]; ?>" total_registros="<?php echo $this->_paginacion['total_registros']; ?>" href="javascript:void(0);">
+                    <a class="pagina" nombre="<?php echo $this->_nombrelista;?>" parametros="<?php echo $this->_parametros;?>"  pagina="<?php echo $this->_paginacion['rango'][$i]; ?>" href="javascript:void(0);">
                         <?php echo $this->_paginacion['rango'][$i]; ?>
                     </a>
                 </li>
@@ -42,7 +42,7 @@
 
         <?php if($this->_paginacion['siguiente']): ?>
 
-            <li><a class="pagina" nombre="<?php echo $this->_nombrelista;?>" parametros="<?php echo $this->_parametros;?>"  pagina="<?php echo $this->_paginacion['siguiente']; ?>" total_registros="<?php echo $this->_paginacion['total_registros']; ?>" href="javascript:void(0);">&gt;</a></li>
+            <li><a class="pagina" nombre="<?php echo $this->_nombrelista;?>" parametros="<?php echo $this->_parametros;?>"  pagina="<?php echo $this->_paginacion['siguiente']; ?>" href="javascript:void(0);">&gt;</a></li>
 
         <?php else: ?>
 
@@ -52,7 +52,7 @@
 
         <?php if($this->_paginacion['ultimo']): ?>
 
-            <li><a class="pagina" nombre="<?php echo $this->_nombrelista;?>" parametros="<?php echo $this->_parametros;?>"  pagina="<?php echo $this->_paginacion['ultimo']; ?>" total_registros="<?php echo $this->_paginacion['total_registros']; ?>" href="javascript:void(0);">&Gt;</a></li>
+            <li><a class="pagina" nombre="<?php echo $this->_nombrelista;?>" parametros="<?php echo $this->_parametros;?>"  pagina="<?php echo $this->_paginacion['ultimo']; ?>" href="javascript:void(0);">&Gt;</a></li>
 
         <?php else: ?>
 

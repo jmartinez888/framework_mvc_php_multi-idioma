@@ -142,9 +142,8 @@ $lenguaje["text_buscar_permisos"]="Search Permit";
 $lenguaje["label_permiso"]="Permission";
 $lenguaje["label_clave"]="Key";
 //nuevos jm
-$lenguaje["label_modulo"]="Module";
-$lenguaje["label_crear_modulo"]="Create Module";
-$lenguaje["label_eliminado"]="Removed";
+$lenguaje["label_modulo"]="Módulo";
+$lenguaje["label_crear_modulo"]="Create Módulo";
 
 
 $lenguaje["bitacora_label_titulo"]="BITACORA : MOST COMMON MISTAKES OF INTEGRATED";

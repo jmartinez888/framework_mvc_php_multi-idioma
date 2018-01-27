@@ -300,11 +300,11 @@
 
             });</script>        
         <script>
-            // $(document).ready(function() {
-            //     $(function() {
-            //         $("[data-toggle='tooltip']").tooltip();
-            //     });
-            // });
+            $(document).ready(function() {
+                $(function() {
+                    $("[data-toggle='tooltip']").tooltip();
+                });
+            });
 
             $('.img-modal').on('click', function() {
 

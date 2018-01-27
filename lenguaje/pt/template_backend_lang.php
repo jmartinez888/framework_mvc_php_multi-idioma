@@ -148,7 +148,6 @@ $lenguaje["label_clave"]="Chave";
 //nuevos jm
 $lenguaje["label_modulo"]="Módulo";
 $lenguaje["label_crear_modulo"]="Criar Módulo";
-$lenguaje["label_eliminado"]="Eliminado";
 
 
 $lenguaje["bitacora_label_titulo"]="Bitácora: MAIS COMUM ERROS DO SISTEMA INTEGRADA";
