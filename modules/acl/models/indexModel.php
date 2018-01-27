@@ -329,7 +329,32 @@ class indexModel extends Model
             $this->registrarBitacora("acl(indexModel)", "getPermisos", "Error Model", $exception);
             return $exception->getTraceAsString();
         }
-    }    
+    }
+
+    public function getModulos(){
+        try{
+            $sql = "call s_s_listar_modulos()";
+            $result = $this->_db->prepare($sql);
+            $result->execute();
+            return $result->fetchAll(PDO::FETCH_ASSOC);
+        } catch (PDOException $exception) {
+            $this->registrarBitacora("acl(indexModel)", "getModulos", "Error Model", $exception);
+            return $exception->getTraceAsString();
+        }
+    }
+
+    public function getPermisosRowCount($condicion = "")
+    {
+        try{
+            $sql = " SELECT COUNT(p.Per_IdPermiso) AS CantidadRegistros FROM permisos p LEFT JOIN modulo m ON p.Mod_IdModulo = m.Mod_IdModulo  $condicion ";
+            $result = $this->_db->prepare($sql);
+            $result->execute();
+            return $result->fetch(PDO::FETCH_ASSOC);
+        } catch (PDOException $exception) {
+            $this->registrarBitacora("acl(indexModel)", "getPermisosRowCount", "Error Model", $exception);
+            return $exception->getTraceAsString();
+        }
+    }
     
     //Util
     public function getPermisosRowCount($condicion = "")
