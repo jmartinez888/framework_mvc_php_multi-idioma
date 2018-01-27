@@ -1,6 +1,6 @@
 /*
 SQLyog Enterprise - MySQL GUI v8.1 
-MySQL - 5.5.5-10.1.25-MariaDB : Database - mvc_php
+MySQL - 5.5.5-10.1.28-MariaDB : Database - mvc_php
 *********************************************************************
 */
 
@@ -26,10 +26,10 @@ CREATE TABLE `bitacora_evento_sistema` (
   `Bit_NombrePagina` varchar(45) DEFAULT NULL,
   `Bit_NombreMetodo` varchar(45) DEFAULT NULL,
   `Bit_Descripcion` longtext,
-  `Bit_Estado` char(1) DEFAULT NULL,
+  `Bit_Estado` tinyint(1) DEFAULT NULL,
   `Evs_IdEventoSistema` int(11) DEFAULT NULL,
   PRIMARY KEY (`Bit_IdBitacora`)
-) ENGINE=InnoDB AUTO_INCREMENT=1971 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=61 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `contenido_traducido` */
 
@@ -45,7 +45,7 @@ CREATE TABLE `contenido_traducido` (
   PRIMARY KEY (`Cot_IdContenidoTraducido`),
   KEY `FK_contenido_traducido` (`Idi_IdIdioma`),
   CONSTRAINT `FK_contenido_traducido` FOREIGN KEY (`Idi_IdIdioma`) REFERENCES `idioma` (`Idi_IdIdioma`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `estadistica_visita` */
 
@@ -61,7 +61,7 @@ CREATE TABLE `estadistica_visita` (
   `Vis_Idioma` varchar(25) NOT NULL,
   `Vis_Ip` varchar(25) NOT NULL,
   PRIMARY KEY (`Vis_IdVisita`)
-) ENGINE=InnoDB AUTO_INCREMENT=55254 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=55644 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `evento_sistema` */
 
@@ -72,7 +72,7 @@ CREATE TABLE `evento_sistema` (
   `Evs_Descripcion` varchar(45) DEFAULT NULL,
   `Evs_Tipo` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`Evs_IdEventoSistema`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `idioma` */
 
@@ -84,6 +84,21 @@ CREATE TABLE `idioma` (
   `Idi_Estado` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`Idi_IdIdioma`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `modulo` */
+
+DROP TABLE IF EXISTS `modulo`;
+
+CREATE TABLE `modulo` (
+  `Mod_IdModulo` int(11) NOT NULL AUTO_INCREMENT,
+  `Mod_Nombre` varchar(100) NOT NULL,
+  `Mod_Codigo` varchar(50) DEFAULT NULL,
+  `Mod_Descripcion` varchar(250) DEFAULT NULL,
+  `Idi_IdIdioma` char(5) DEFAULT NULL,
+  `Mod_Estado` tinyint(1) DEFAULT NULL,
+  `Mod_Eliminar` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`Mod_IdModulo`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `pagina` */
 
@@ -100,23 +115,9 @@ CREATE TABLE `pagina` (
   `Pag_Contenido` longtext NOT NULL,
   `Pag_Url` varchar(250) NOT NULL,
   `Pag_Selectable` tinyint(11) NOT NULL,
-  `Pag_Estado` tinyint(11) NOT NULL,
-  `Idi_IdIdioma` char(11) NOT NULL,
+  `Pag_Estado` tinyint(1) NOT NULL,
+  `Idi_IdIdioma` char(5) NOT NULL,
   PRIMARY KEY (`Pag_IdPagina`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
-/*Table structure for table `permiso_usuario` */
-
-DROP TABLE IF EXISTS `permiso_usuario`;
-
-CREATE TABLE `permiso_usuario` (
-  `Usu_IdUsuario` int(11) NOT NULL,
-  `Per_IdPermisos` int(11) NOT NULL,
-  `Peu_Valor` varchar(50) DEFAULT NULL,
-  PRIMARY KEY (`Usu_IdUsuario`,`Per_IdPermisos`),
-  KEY `FK_permiso_usuario_per` (`Per_IdPermisos`),
-  CONSTRAINT `FK_permiso_usuario_per` FOREIGN KEY (`Per_IdPermisos`) REFERENCES `permisos` (`Per_IdPermiso`),
-  CONSTRAINT `FK_permiso_usuario_usu` FOREIGN KEY (`Usu_IdUsuario`) REFERENCES `usuario` (`Usu_IdUsuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `permisos` */
@@ -125,13 +126,17 @@ DROP TABLE IF EXISTS `permisos`;
 
 CREATE TABLE `permisos` (
   `Per_IdPermiso` int(11) NOT NULL AUTO_INCREMENT,
-  `Per_Permiso` varchar(100) NOT NULL,
+  `Per_Nombre` varchar(100) NOT NULL,
   `Per_Ckey` varchar(50) NOT NULL,
-  `Idi_IdIdioma` int(11) DEFAULT NULL,
-  `Per_Estado` tinyint(5) DEFAULT NULL,
+  `Mod_IdModulo` int(11) DEFAULT NULL,
+  `Idi_IdIdioma` char(5) DEFAULT NULL,
+  `Per_Estado` tinyint(1) DEFAULT NULL,
+  `Per_Eliminar` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`Per_IdPermiso`),
-  KEY `FK_permisos_idi` (`Idi_IdIdioma`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+  KEY `FK_permisos_idi` (`Idi_IdIdioma`),
+  KEY `FK_permisos_modulo` (`Mod_IdModulo`),
+  CONSTRAINT `FK_permisos_modulo` FOREIGN KEY (`Mod_IdModulo`) REFERENCES `modulo` (`Mod_IdModulo`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `permisos_rol` */
 
@@ -140,12 +145,12 @@ DROP TABLE IF EXISTS `permisos_rol`;
 CREATE TABLE `permisos_rol` (
   `Rol_IdRol` int(11) NOT NULL,
   `Per_IdPermiso` int(11) NOT NULL,
-  `Rol_Valor` tinyint(4) NOT NULL,
+  `Per_Valor` tinyint(1) NOT NULL,
   PRIMARY KEY (`Rol_IdRol`,`Per_IdPermiso`),
   UNIQUE KEY `role` (`Rol_IdRol`,`Per_IdPermiso`),
   KEY `FK_permisos_role` (`Per_IdPermiso`),
-  CONSTRAINT `FK_permisos_rol` FOREIGN KEY (`Rol_IdRol`) REFERENCES `rol` (`Rol_IdRol`),
-  CONSTRAINT `FK_permisos_role` FOREIGN KEY (`Per_IdPermiso`) REFERENCES `permisos` (`Per_IdPermiso`)
+  CONSTRAINT `FK_permisos_rol_permiso` FOREIGN KEY (`Per_IdPermiso`) REFERENCES `permisos` (`Per_IdPermiso`),
+  CONSTRAINT `FK_permisos_rol_rol` FOREIGN KEY (`Rol_IdRol`) REFERENCES `rol` (`Rol_IdRol`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `permisos_usuario` */
@@ -155,11 +160,11 @@ DROP TABLE IF EXISTS `permisos_usuario`;
 CREATE TABLE `permisos_usuario` (
   `Usu_IdUsuario` int(11) NOT NULL,
   `Per_IdPermiso` int(11) NOT NULL,
-  `Usu_Valor` tinyint(4) NOT NULL,
+  `Peu_Valor` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`Usu_IdUsuario`,`Per_IdPermiso`),
-  KEY `FK_permisos_usuario` (`Per_IdPermiso`),
-  CONSTRAINT `FK_permisos_usuario_permi` FOREIGN KEY (`Per_IdPermiso`) REFERENCES `permisos` (`Per_IdPermiso`),
-  CONSTRAINT `FK_permisos_usuario_usu` FOREIGN KEY (`Usu_IdUsuario`) REFERENCES `usuario` (`Usu_IdUsuario`)
+  KEY `FK_permiso_usuario_per` (`Per_IdPermiso`),
+  CONSTRAINT `FK_permiso_usuario_per` FOREIGN KEY (`Per_IdPermiso`) REFERENCES `permisos` (`Per_IdPermiso`),
+  CONSTRAINT `FK_permiso_usuario_usu` FOREIGN KEY (`Usu_IdUsuario`) REFERENCES `usuario` (`Usu_IdUsuario`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*Table structure for table `rol` */
@@ -168,12 +173,16 @@ DROP TABLE IF EXISTS `rol`;
 
 CREATE TABLE `rol` (
   `Rol_IdRol` int(11) NOT NULL AUTO_INCREMENT,
-  `Rol_role` varchar(100) NOT NULL,
-  `Idi_IdIdioma` char(11) DEFAULT NULL,
+  `Rol_Nombre` varchar(100) NOT NULL,
+  `Mod_IdModulo` int(11) DEFAULT NULL,
+  `Idi_IdIdioma` char(5) DEFAULT NULL,
   `Rol_Estado` tinyint(1) NOT NULL,
+  `Rol_Eliminar` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`Rol_IdRol`),
-  KEY `FK_roles_idi` (`Idi_IdIdioma`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+  KEY `FK_roles_idi` (`Idi_IdIdioma`),
+  KEY `FK_rol_modulo` (`Mod_IdModulo`),
+  CONSTRAINT `FK_rol_modulo` FOREIGN KEY (`Mod_IdModulo`) REFERENCES `modulo` (`Mod_IdModulo`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `usuario` */
 
@@ -191,14 +200,28 @@ CREATE TABLE `usuario` (
   `Usu_Usuario` varchar(50) NOT NULL,
   `Usu_Password` varchar(250) NOT NULL,
   `Usu_Email` varchar(25) NOT NULL,
-  `Rol_IdRol` int(11) NOT NULL,
-  `Usu_Fecha` varchar(250) NOT NULL,
+  `Usu_Fecha` date NOT NULL,
+  `Usu_FechaActualizacion` date NOT NULL,
+  `Usu_FechaUltimoAcceso` date NOT NULL,
   `Usu_Estado` tinyint(1) NOT NULL,
   `Usu_Codigo` varchar(250) NOT NULL,
-  PRIMARY KEY (`Usu_IdUsuario`),
-  KEY `FK_usuario` (`Rol_IdRol`),
-  CONSTRAINT `FK_usuario` FOREIGN KEY (`Rol_IdRol`) REFERENCES `rol` (`Rol_IdRol`)
+  `Usu_Eliminar` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`Usu_IdUsuario`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+/*Table structure for table `usuario_rol` */
+
+DROP TABLE IF EXISTS `usuario_rol`;
+
+CREATE TABLE `usuario_rol` (
+  `Usu_IdUsuario` int(11) NOT NULL,
+  `Rol_IdRol` int(11) NOT NULL,
+  `Usr_Valor` int(3) DEFAULT NULL,
+  PRIMARY KEY (`Usu_IdUsuario`,`Rol_IdRol`),
+  KEY `FK_usuario_rol_rol` (`Rol_IdRol`),
+  CONSTRAINT `FK_usuario_rol_rol` FOREIGN KEY (`Rol_IdRol`) REFERENCES `rol` (`Rol_IdRol`),
+  CONSTRAINT `FK_usuario_rol_usuario` FOREIGN KEY (`Usu_IdUsuario`) REFERENCES `usuario` (`Usu_IdUsuario`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /* Function  structure for function  `fn_devolverIdioma` */
 
@@ -206,16 +229,16 @@ CREATE TABLE `usuario` (
 DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` FUNCTION `fn_devolverIdioma`(Tabla VARCHAR(50), Registro INT(11),idioma char(5), IdiomaOriginal char(5)) RETURNS char(5) CHARSET utf8
-BEGIN
-      DECLARE iIdi_IdIdioma char(5);
-      SET iIdi_IdIdioma= (SELECT DISTINCT Idi_IdIdioma FROM contenido_traducido WHERE Cot_Tabla=Tabla AND Cot_IdRegistro=Registro and Idi_IdIdioma=idioma);
-      
-      if (isnull(iIdi_IdIdioma)) 
-      THEN
-      set iIdi_IdIdioma=IdiomaOriginal;
-      end if;
-	
-	RETURN iIdi_IdIdioma;
+BEGIN
+      DECLARE iIdi_IdIdioma char(5);
+      SET iIdi_IdIdioma= (SELECT DISTINCT Idi_IdIdioma FROM contenido_traducido WHERE Cot_Tabla=Tabla AND Cot_IdRegistro=Registro and Idi_IdIdioma=idioma);
+      
+      if (isnull(iIdi_IdIdioma)) 
+      THEN
+      set iIdi_IdIdioma=IdiomaOriginal;
+      end if;
+	
+	RETURN iIdi_IdIdioma;
     END */$$
 DELIMITER ;
 
@@ -225,16 +248,16 @@ DELIMITER ;
 DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` FUNCTION `fn_TraducirContenido`(Tabla VARCHAR(50), Columna VARCHAR(50), Registro INT, Idioma CHAR(5), ContenidoOriginal LONGTEXT) RETURNS longtext CHARSET utf8
-BEGIN
-      DECLARE Resultado longtext;
-      SET Resultado= ( SELECT Cot_Traduccion FROM contenido_traducido WHERE Cot_Tabla=Tabla AND Cot_Columna=Columna AND Cot_IdRegistro=Registro AND Idi_IdIdioma=Idioma );
-      
-      if (isnull(Resultado)) 
-      THEN
-      set Resultado=ContenidoOriginal;
-      end if;
-	
-	RETURN Resultado;
+BEGIN
+      DECLARE Resultado longtext;
+      SET Resultado= ( SELECT Cot_Traduccion FROM contenido_traducido WHERE Cot_Tabla=Tabla AND Cot_Columna=Columna AND Cot_IdRegistro=Registro AND Idi_IdIdioma=Idioma );
+      
+      if (isnull(Resultado)) 
+      THEN
+      set Resultado=ContenidoOriginal;
+      end if;
+	
+	RETURN Resultado;
     END */$$
 DELIMITER ;
 
@@ -354,34 +377,34 @@ DELIMITER ;
 
 DELIMITER $$
 
-/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_i_estadistica_visita`(
-IN iVis_Explorador VARCHAR(25),
-IN iVis_PaginaVisita VARCHAR(250),
-IN iVis_PaginaAnterior VARCHAR(250),
-IN iVis_SistemaOperativo VARCHAR(250),
-IN iVis_Idioma VARCHAR(25),
-IN iVis_Ip VARCHAR(50)
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_i_estadistica_visita`(
+IN iVis_Explorador VARCHAR(25),
+IN iVis_PaginaVisita VARCHAR(250),
+IN iVis_PaginaAnterior VARCHAR(250),
+IN iVis_SistemaOperativo VARCHAR(250),
+IN iVis_Idioma VARCHAR(25),
+IN iVis_Ip VARCHAR(50)
 )
-BEGIN
-    INSERT INTO estadistica_visita(
-	Vis_Explorador,
-	Vis_Fecha,
-	Vis_PaginaVisita,
-	Vis_PaginaAnterior,
-	Vis_SistemaOperativo,
-	Vis_Idioma,
-	Vis_Ip
-	)
-   VALUES(
-	iVis_Explorador,
-	NOW(),
-	iVis_PaginaVisita,
-	iVis_PaginaAnterior,
-	iVis_SistemaOperativo,
-	iVis_Idioma,
-	iVis_Ip
-);
-    SELECT LAST_INSERT_ID();
+BEGIN
+    INSERT INTO estadistica_visita(
+	Vis_Explorador,
+	Vis_Fecha,
+	Vis_PaginaVisita,
+	Vis_PaginaAnterior,
+	Vis_SistemaOperativo,
+	Vis_Idioma,
+	Vis_Ip
+	)
+   VALUES(
+	iVis_Explorador,
+	NOW(),
+	iVis_PaginaVisita,
+	iVis_PaginaAnterior,
+	iVis_SistemaOperativo,
+	iVis_Idioma,
+	iVis_Ip
+);
+    SELECT LAST_INSERT_ID();
 END */$$
 DELIMITER ;
 
@@ -442,19 +465,22 @@ DELIMITER ;
 DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_i_permisos`(
-	IN iPer_Permiso VARCHAR(100) ,
+	IN iPer_Nombre VARCHAR(100) ,
 	IN iPer_Ckey VARCHAR(50) ,
-	IN iIdi_IdIdioma CHAR(11) 
+	IN iMod_IdModulo int(11),
+	IN iIdi_IdIdioma CHAR(5) 
     )
 BEGIN
     INSERT INTO permisos(
-	Per_Permiso,
+	Per_Nombre,
 	Per_Ckey,
+	Mod_IdModulo,
 	Idi_IdIdioma
 	)
    VALUES(
-	iPer_Permiso,
+	iPer_Nombre,
 	iPer_Ckey,
+	iMod_IdModulo,
 	iIdi_IdIdioma
 );
     SELECT LAST_INSERT_ID();
@@ -468,18 +494,18 @@ DELIMITER ;
 DELIMITER $$
 
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_i_rol`(
-	IN iRol_role VARCHAR(100) ,
+	IN iRol_Nombre VARCHAR(100) ,
 	IN iIdi_IdIdioma CHAR(11) ,
 	in iRol_Estado tinyint(1)
     )
 BEGIN
     INSERT INTO rol(
-	Rol_role,
+	Rol_Nombre,
 	Idi_IdIdioma,
 	Rol_Estado
 	)
    VALUES(
-	iRol_role,
+	iRol_Nombre,
 	iIdi_IdIdioma,
 	iRol_Estado
 );
@@ -496,109 +522,6 @@ DELIMITER $$
 /*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_bitacora_evento_sistema`(IN iBit_Descripcion VARCHAR(1000) )
 SELECT * FROM bitacora_evento_sistema be
 WHERE be.Bit_Descripcion like   CONCAT('%', iBit_Descripcion ,'%') */$$
-DELIMITER ;
-
-/* Procedure structure for procedure `s_s_ListarBitacoraErrores` */
-
-/*!50003 DROP PROCEDURE IF EXISTS  `s_s_ListarBitacoraErrores` */;
-
-DELIMITER $$
-
-/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_ListarBitacoraErrores`(
-IN iano VARCHAR(10),
-IN imes VARCHAR(10),
-IN iEvs_Tipo VARCHAR(250)
-)
-select 
-		B.Bit_IdBitacora,
-		E.Evs_Tipo,
-		E.Evs_Descripcion,
-		B.Bit_NombrePagina,
-		B.Bit_Fecha
-	from 
-		evento_sistema as E 
-		left join bitacora_evento_sistema as B on (E.Evs_IdEventoSistema = B.Evs_IdEventoSistema)
-	where
-		E.Evs_Tipo like CONCAT('%', iEvs_Tipo ,'%') and
-		YEAR(B.Bit_Fecha) like case when iano is null then '%' else CONCAT('%', iano ,'%') end and 
-		Month(B.Bit_Fecha) like case when imes is null then '%' else CONCAT('%', imes ,'%') end
-	order by B.Bit_Fecha desc */$$
-DELIMITER ;
-
-/* Procedure structure for procedure `s_s_ListarVisita` */
-
-/*!50003 DROP PROCEDURE IF EXISTS  `s_s_ListarVisita` */;
-
-DELIMITER $$
-
-/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_ListarVisita`(
-IN iano VARCHAR(10),
-IN imes VARCHAR(10)
-)
-SELECT 
-		V.Vis_IdVisita,
-		V.Vis_Explorador,
-		V.Vis_Fecha,
-		V.Vis_PaginaVisita,
-		V.Vis_PaginaAnterior,
-		V.Vis_SistemaOperativo,
-		V.Vis_Idioma,
-		V.Vis_Ip
-	FROM 
-		estadistica_visita AS V
-	WHERE
-		YEAR(V.Vis_Fecha) LIKE CASE WHEN iano IS NULL THEN '%' ELSE CONCAT('%', iano ,'%') END AND 
-		MONTH(V.Vis_Fecha) LIKE CASE WHEN imes IS NULL THEN '%' ELSE CONCAT('%', imes ,'%') END
-	ORDER BY V.Vis_Fecha DESC */$$
-DELIMITER ;
-
-/* Procedure structure for procedure `s_s_ObtenerErroresMasComunes` */
-
-/*!50003 DROP PROCEDURE IF EXISTS  `s_s_ObtenerErroresMasComunes` */;
-
-DELIMITER $$
-
-/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_ObtenerErroresMasComunes`(
-IN iano VARCHAR(10),
-IN imes VARCHAR(10),
-IN iEvs_Tipo VARCHAR(250)
-)
-SELECT 
-		E.Evs_Descripcion as descripcion , 
-		COUNT(B.Bit_IdBitacora) As N
-	FROM 
-		evento_sistema AS E 
-		LEFT JOIN bitacora_evento_sistema AS B ON (E.Evs_IdEventoSistema = B.Evs_IdEventoSistema)
-	WHERE
-		E.Evs_Tipo LIKE CONCAT('%', iEvs_Tipo ,'%') AND
-		YEAR(B.Bit_Fecha) LIKE CASE WHEN iano IS NULL THEN '%' ELSE CONCAT('%', iano ,'%') END AND 
-		MONTH(B.Bit_Fecha) LIKE CASE WHEN imes IS NULL THEN '%' ELSE CONCAT('%', imes ,'%') END
-	GROUP BY (E.Evs_Descripcion)		
-	ORDER BY COUNT(E.Evs_Descripcion) DESC
-	LIMIT 7 */$$
-DELIMITER ;
-
-/* Procedure structure for procedure `s_s_ObtenerExplorador` */
-
-/*!50003 DROP PROCEDURE IF EXISTS  `s_s_ObtenerExplorador` */;
-
-DELIMITER $$
-
-/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_ObtenerExplorador`(
-IN iano VARCHAR(10),
-IN imes VARCHAR(10)
-)
-SELECT 
-		V.Vis_Explorador  AS descripcion ,
- 		COUNT(V.Vis_Explorador) AS N
-	FROM 
-		estadistica_visita AS V
-	WHERE
-		YEAR(V.Vis_Fecha) LIKE CASE WHEN iano IS NULL THEN '%' ELSE CONCAT('%', iano ,'%') END AND 
-		MONTH(V.Vis_Fecha) LIKE CASE WHEN imes IS NULL THEN '%' ELSE CONCAT('%', imes ,'%') END
-	GROUP BY (V.Vis_Explorador)
-	ORDER BY COUNT(V.Vis_Fecha) DESC
-	limit 10 */$$
 DELIMITER ;
 
 /* Procedure structure for procedure `s_s_Buscar_Pagina` */
@@ -661,6 +584,251 @@ SELECT p.* FROM (
 	
 	FROM pagina pa) p WHERE p.Pag_IdPrincipal = iPag_IdPrincipal and p.Pag_TipoPagina = iPag_TipoPagina and
 	CASE WHEN iPag_Nombre IS NULL THEN  p.Pag_Nombre LIKE '%' ELSE  p.Pag_Nombre LIKE CONCAT('%', iPag_Nombre ,'%') ENd */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_evento_sistema` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_evento_sistema` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_evento_sistema`( 
+    )
+SELECT * FROM evento_sistema
+DELIMITER */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_idioma` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_idioma` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_idioma`( 
+    )
+SELECT * FROM idioma
+DELIMITER */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_ListarBitacoraErrores` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_ListarBitacoraErrores` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_ListarBitacoraErrores`(
+IN iano VARCHAR(10),
+IN imes VARCHAR(10),
+IN iEvs_Tipo VARCHAR(250)
+)
+select 
+		B.Bit_IdBitacora,
+		E.Evs_Tipo,
+		E.Evs_Descripcion,
+		B.Bit_NombrePagina,
+		B.Bit_Fecha
+	from 
+		evento_sistema as E 
+		left join bitacora_evento_sistema as B on (E.Evs_IdEventoSistema = B.Evs_IdEventoSistema)
+	where
+		E.Evs_Tipo like CONCAT('%', iEvs_Tipo ,'%') and
+		YEAR(B.Bit_Fecha) like case when iano is null then '%' else CONCAT('%', iano ,'%') end and 
+		Month(B.Bit_Fecha) like case when imes is null then '%' else CONCAT('%', imes ,'%') end
+	order by B.Bit_Fecha desc */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_ListarVisita` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_ListarVisita` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_ListarVisita`(
+IN iano VARCHAR(10),
+IN imes VARCHAR(10)
+)
+SELECT 
+		V.Vis_IdVisita,
+		V.Vis_Explorador,
+		V.Vis_Fecha,
+		V.Vis_PaginaVisita,
+		V.Vis_PaginaAnterior,
+		V.Vis_SistemaOperativo,
+		V.Vis_Idioma,
+		V.Vis_Ip
+	FROM 
+		estadistica_visita AS V
+	WHERE
+		YEAR(V.Vis_Fecha) LIKE CASE WHEN iano IS NULL THEN '%' ELSE CONCAT('%', iano ,'%') END AND 
+		MONTH(V.Vis_Fecha) LIKE CASE WHEN imes IS NULL THEN '%' ELSE CONCAT('%', imes ,'%') END
+	ORDER BY V.Vis_Fecha DESC */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_listar_ids_permisos_x_id_rol` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_listar_ids_permisos_x_id_rol` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_listar_ids_permisos_x_id_rol`( 
+	IN iRol_IdRol int(11) 
+)
+SELECT Per_IdPermiso FROM permisos_rol 
+	WHERE Rol_IdRol = iRol_IdRol */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_listar_modulos` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_listar_modulos` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_listar_modulos`( )
+SELECT * FROM modulo WHERE Mod_Eliminar = 1 */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_listar_permisos_con_modulo` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_listar_permisos_con_modulo` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_listar_permisos_con_modulo`( 
+	IN iPagina INT(11),
+	IN iRegistrosXPagina INT(11),
+	in iPer_Eliminar tinyint(1)
+)
+BEGIN
+	DECLARE registroInicio INT;
+	IF iPagina > 0 THEN 
+		SET registroInicio = (iPagina - 1) * iRegistrosXPagina;
+		if iPer_Eliminar = 1 then
+			SELECT p.*, m.Mod_Nombre FROM permisos p
+			LEFT JOIN modulo m ON p.Mod_IdModulo = m.Mod_IdModulo  
+			where Per_Eliminar = iPer_Eliminar 
+			LIMIT registroInicio,iRegistrosXPagina;
+		else
+			SELECT p.*, m.Mod_Nombre FROM permisos p
+			LEFT JOIN modulo m ON p.Mod_IdModulo = m.Mod_IdModulo 
+			ORDER BY Per_Eliminar DESC 
+			LIMIT registroInicio,iRegistrosXPagina;
+		end if;
+	ELSE 
+		IF iPer_Eliminar = 1 THEN						
+			SELECT p.*, m.Mod_Nombre FROM permisos p
+			LEFT JOIN modulo m ON p.Mod_IdModulo = m.Mod_IdModulo  
+			WHERE Per_Eliminar = iPer_Eliminar
+			LIMIT 0,iRegistrosXPagina;
+		else 
+			SELECT p.*, m.Mod_Nombre FROM permisos p
+			LEFT JOIN modulo m ON p.Mod_IdModulo = m.Mod_IdModulo  
+			ORDER BY Per_Eliminar DESC 
+			LIMIT 0,iRegistrosXPagina;
+		END IF;
+	END IF;
+END */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_listar_permisos_rol_x_id_rol` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_listar_permisos_rol_x_id_rol` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_listar_permisos_rol_x_id_rol`( 
+	IN iRol_IdRol int(11) 
+)
+SELECT * FROM permisos_rol 
+	WHERE Rol_IdRol = iRol_IdRol */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_listar_permisos_usuario_x_id_usuario` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_listar_permisos_usuario_x_id_usuario` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_listar_permisos_usuario_x_id_usuario`( 
+	IN iUsu_IdUsuario INT(11),
+	IN iPermisosIds VARCHAR(250) 
+)
+SELECT * FROM permisos_usuario 
+	WHERE Usu_IdUsuario = iUsu_IdUsuario AND Per_IdPermiso IN (iPermisosIds) */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_listar_roles_x_id_usuario` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_listar_roles_x_id_usuario` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_listar_roles_x_id_usuario`( 
+	IN iUsu_IdUsuario int(11) 
+)
+SELECT ur.Rol_IdRol, r.Rol_Nombre FROM usuario_rol ur 
+	inner JOIN rol r ON ur.Rol_IdRol = r.Rol_IdRol  
+	WHERE ur.Usu_IdUsuario = iUsu_IdUsuario */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_modulo` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_modulo` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_modulo`( 
+    )
+SELECT * FROM modulo
+DELIMITER */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_ObtenerErroresMasComunes` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_ObtenerErroresMasComunes` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_ObtenerErroresMasComunes`(
+IN iano VARCHAR(10),
+IN imes VARCHAR(10),
+IN iEvs_Tipo VARCHAR(250)
+)
+SELECT 
+		E.Evs_Descripcion as descripcion , 
+		COUNT(B.Bit_IdBitacora) As N
+	FROM 
+		evento_sistema AS E 
+		LEFT JOIN bitacora_evento_sistema AS B ON (E.Evs_IdEventoSistema = B.Evs_IdEventoSistema)
+	WHERE
+		E.Evs_Tipo LIKE CONCAT('%', iEvs_Tipo ,'%') AND
+		YEAR(B.Bit_Fecha) LIKE CASE WHEN iano IS NULL THEN '%' ELSE CONCAT('%', iano ,'%') END AND 
+		MONTH(B.Bit_Fecha) LIKE CASE WHEN imes IS NULL THEN '%' ELSE CONCAT('%', imes ,'%') END
+	GROUP BY (E.Evs_Descripcion)		
+	ORDER BY COUNT(E.Evs_Descripcion) DESC
+	LIMIT 7 */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_ObtenerExplorador` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_ObtenerExplorador` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_ObtenerExplorador`(
+IN iano VARCHAR(10),
+IN imes VARCHAR(10)
+)
+SELECT 
+		V.Vis_Explorador  AS descripcion ,
+ 		COUNT(V.Vis_Explorador) AS N
+	FROM 
+		estadistica_visita AS V
+	WHERE
+		YEAR(V.Vis_Fecha) LIKE CASE WHEN iano IS NULL THEN '%' ELSE CONCAT('%', iano ,'%') END AND 
+		MONTH(V.Vis_Fecha) LIKE CASE WHEN imes IS NULL THEN '%' ELSE CONCAT('%', imes ,'%') END
+	GROUP BY (V.Vis_Explorador)
+	ORDER BY COUNT(V.Vis_Fecha) DESC
+	limit 10 */$$
 DELIMITER ;
 
 /* Procedure structure for procedure `s_s_ObtenerIpMasFrecuentes` */
@@ -756,6 +924,103 @@ SELECT
 	GROUP BY (V.Vis_PaginaVisita)
 	ORDER BY COUNT(V.Vis_Fecha) DESC
 	limit 10 */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_obtener_ckey_permiso_x_id` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_obtener_ckey_permiso_x_id` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_obtener_ckey_permiso_x_id`( 
+	IN iPer_IdPermiso int(11) 
+)
+select Per_Ckey as `key` from permisos where Per_IdPermiso = iPer_IdPermiso */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_obtener_nombre_permiso_x_id` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_obtener_nombre_permiso_x_id` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_obtener_nombre_permiso_x_id`( 
+	IN iPer_IdPermiso int(11) 
+)
+SELECT Per_Nombre FROM permisos where Per_IdPermiso = iPer_IdPermiso */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_obtener_nombre_rol_x_id` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_obtener_nombre_rol_x_id` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_obtener_nombre_rol_x_id`( 
+	IN iRol_IdRol int(11) 
+)
+SELECT Rol_Nombre FROM rol WHERE Rol_IdRol = iRol_IdRol */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_pagina` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_pagina` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_pagina`( 
+    )
+SELECT * FROM pagina
+DELIMITER */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_permisos` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_permisos` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_permisos`( 
+    )
+SELECT * FROM permisos
+DELIMITER */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_rol` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_rol` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_rol`( 
+    )
+SELECT * FROM rol
+DELIMITER */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_s_usuario` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_s_usuario` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_s_usuario`( 
+    )
+SELECT * FROM usuario
+DELIMITER */$$
+DELIMITER ;
+
+/* Procedure structure for procedure `s_u_cambiar_estado_permiso` */
+
+/*!50003 DROP PROCEDURE IF EXISTS  `s_u_cambiar_estado_permiso` */;
+
+DELIMITER $$
+
+/*!50003 CREATE DEFINER=`root`@`localhost` PROCEDURE `s_u_cambiar_estado_permiso`(
+	IN iPer_IdPermiso int(11),
+	IN iPer_Estado tinyint(1)
+)
+UPDATE permisos SET Per_Estado = iPer_Estado WHERE Per_IdPermiso = iPer_IdPermiso */$$
 DELIMITER ;
 
 /* Procedure structure for procedure `s_u_contenido_traducido` */
