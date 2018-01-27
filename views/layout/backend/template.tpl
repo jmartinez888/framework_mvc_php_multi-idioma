@@ -172,8 +172,22 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         {/if}
                         {if $_acl->permiso("listar_estandar")}
                         <li class=""><a href="{$_layoutParams.root}estandar"><i class='fa fa-database'></i> <span>{$lenguaje.menu_izquierdo_2_3}</span></a></li>
-                        {/if}          
-                    </ul><!-- /.sidebar-menu -->
+                        {/if}     
+
+                            
+                    </ul>
+
+                    <ul class="sidebar-menu">
+                        <li class="header">{$lenguaje.menu_izquierdo_1}</li>
+                        {if $_acl->permiso("listar_usuarios")}
+                        <li class="treeview">
+                            <a href="#"><i class='glyphicon glyphicon-user'></i> <span>POrueba</span> <i class="fa fa-angle-left pull-right"></i></a>
+                            <ul class="treeview-menu">
+                                <li><a href="{$_layoutParams.root}visitacopia">Luchito</a></li>
+                        </li>
+                        {/if} 
+                        </ul>
+                    <!-- /.sidebar-menu -->
                 </section>
                 <!-- /.sidebar -->
             </aside>

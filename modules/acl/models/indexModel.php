@@ -386,20 +386,22 @@ class indexModel extends Model
             return $exception->getTraceAsString();
         }
     }
+    //util
     public function verificarPermisoRol($Per_IdPermiso)
     {
         try{
-            $permiso = $this->_db->query("SELECT * FROM permisos_rol WHERE Per_IdPermiso = '$Per_IdPermiso' and Rol_Valor = 1");
+            $permiso = $this->_db->query("SELECT * FROM permisos_rol WHERE Per_IdPermiso = '$Per_IdPermiso' and Per_Valor = 1");
             return $permiso->fetchAll();
         } catch (PDOException $exception) {
             $this->registrarBitacora("acl(indexModel)", "verificarPermisoRol", "Error Model", $exception);
             return $exception->getTraceAsString();
         }
     }
+    //util
     public function verificarPermisoUsuario($Per_IdPermiso)
     {
         try{
-            $permiso = $this->_db->query("SELECT * FROM permisos_usuario WHERE Per_IdPermiso = '$Per_IdPermiso' and Usu_Valor = 1");
+            $permiso = $this->_db->query("SELECT * FROM permisos_usuario WHERE Per_IdPermiso = '$Per_IdPermiso' and Peu_Valor = 1");
             return $permiso->fetchAll();
         } catch (PDOException $exception) {
             $this->registrarBitacora("acl(indexModel)", "verificarPermisoUsuario", "Error Model", $exception);
@@ -427,7 +429,20 @@ class indexModel extends Model
             return $exception->getTraceAsString();
         }
     }
-    
+    //util
+    public function eliminarPermisosRol($permisoID)
+    {
+        try{
+            $permiso = $this->_db->query(
+                " UPDATE permisos_rol SET Rol_Valor = 0  WHERE Per_IdPermiso = {$permisoID} "
+                            
+                );
+            return $permiso->rowCount(PDO::FETCH_ASSOC);
+        } catch (PDOException $exception) {
+            $this->registrarBitacora("acl(indexModel)", "eliminarPermisosRol", "Error Model", $exception);
+            return $exception->getTraceAsString();
+        }
+    }
     public function eliminarPermisoRole($roleID, $permisoID)
     {
         try{
@@ -441,20 +456,7 @@ class indexModel extends Model
             return $exception->getTraceAsString();
         }
     }
-    public function eliminarPermisosRol($permisoID)
-    {
-        try{
-            $permiso = $this->_db->query(
-                "DELETE FROM permisos_rol " . 
-                "WHERE Per_IdPermiso = {$permisoID} " .
-                "AND Rol_Valor = 0 "               
-                );
-            return $permiso->rowCount(PDO::FETCH_ASSOC);
-        } catch (PDOException $exception) {
-            $this->registrarBitacora("acl(indexModel)", "eliminarPermisosRol", "Error Model", $exception);
-            return $exception->getTraceAsString();
-        }
-    }
+
     public function eliminarPermisosUsuario($permisoID)
     {
         try{
@@ -480,15 +482,16 @@ class indexModel extends Model
             return $exception->getTraceAsString();
         }
     }
-    public function eliminarPermiso($permisoID)
+    //UTIL
+    public function eliminarHabilitarPermiso($Per_IdPermiso,$Per_Eliminar)
     {
         try{
             $permiso = $this->_db->query(
-                "DELETE FROM permisos WHERE Per_IdPermiso = $permisoID "               
+                " UPDATE permisos SET Per_Eliminar = $Per_Eliminar WHERE Per_IdPermiso = $Per_IdPermiso "               
                 );
             return $permiso->rowCount(PDO::FETCH_ASSOC);
         } catch (PDOException $exception) {
-            $this->registrarBitacora("acl(indexModel)", "eliminarPermiso", "Error Model", $exception);
+            $this->registrarBitacora("acl(indexModel)", "eliminarHabilitarPermiso", "Error Model", $exception);
             return $exception->getTraceAsString();
         }
     }

@@ -527,56 +527,53 @@ class indexController extends aclController
         $this->_view->renderizar('ajax/listarPermisos', false, true);
     }
 
-    public function _eliminarPermiso($idPermiso = false)
+    public function _eliminarPermiso()
     {
         $this->_acl->acceso('agregar_rol');
+        $idPermiso = $this->getInt('_Per_IdPermiso');
+        $Per_Eliminar = $this->getInt('_Per_Eliminar');
+        echo $idPermiso."//".$Per_Eliminar;
         $error = "";
-        if(!$this->filtrarInt($idPermiso))
+        if(!$idPermiso)
         {            
             $this->_view->assign('_error', 'Error parametro ID ..!!');
             $this->_view->renderizar('index');
             exit;
         }
 
-        $role = $this->_aclm->verificarPermisoRol($this->filtrarInt($idPermiso));
-        //print_r($role);
+        $role = $this->_aclm->verificarPermisoRol($idPermiso);
+        // print_r($role);
         if (!$role)
         {
-            $usuario = $this->_aclm->verificarPermisoUsuario($this->filtrarInt($idPermiso));
+            $usuario = $this->_aclm->verificarPermisoUsuario($idPermiso);
             if(!$usuario){
-                $rowCount1 = $this->_aclm->eliminarPermisosRol($this->filtrarInt($idPermiso));
-                $rowCount2 = $this->_aclm->eliminarPermisosUsuario($this->filtrarInt($idPermiso));
-                $rowCount3 = $this->_aclm->eliminarPermiso($this->filtrarInt($idPermiso));
-                // echo $rowCount3;//exit;
+                // $rowCount1 = $this->_aclm->eliminarPermisosRol($this->getInt($idPermiso));
+                // $rowCount2 = $this->_aclm->eliminarPermisosUsuario($this->getInt($idPermiso));
+                $rowCount3 = $this->_aclm->eliminarHabilitarPermiso($idPermiso,$Per_Eliminar);
+                echo $rowCount3;//exit;
 
                 if($rowCount3)
                 {
                     $error = 1;
                     //$this->_view->assign('_mensaje', 'El permiso fue elimnado correctamente...!!!');
-                } 
-                else 
-                {
+                } else {
                     $error = 'No se pudo eliminar permiso...!!!';
                    // $this->_view->assign('_error', 'No se pudo eliminar permiso...!!!');
                 }
                 //exit;
-            } 
-            else 
-            {
+            } else {
                 $error = 'No se puede eliminar permiso asignado a usuario...!!!';
                 //$this->_view->assign('_error', 'No se puede eliminar permiso asignado a usuario...!!!');
             }
             
-        }  
-        else 
-        {
+        } else {
             $error = 'No se puede eliminar permiso asignado a rol...!!!';
            // $this->_view->assign('_error', 'No se puede eliminar permiso asignado a rol...!!!');
           //  echo 'No se puede eliminar permiso asignado a rol...!!!';
           //  exit;
             //$this->_aclm->eliminarRole($this->filtrarInt($idPermiso));
         }  
-
+        echo $error;exit;
         $this->redireccionar("acl/index/permisos/".$error);
         //$this->permisos($error);
     }
