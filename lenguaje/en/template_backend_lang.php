@@ -145,6 +145,7 @@ $lenguaje["label_clave"]="Key";
 $lenguaje["label_modulo"]="Module";
 $lenguaje["label_crear_modulo"]="Create Module";
 $lenguaje["label_eliminado"]="Removed";
+$lenguaje["label_habilitar"]="Enable";
 
 
 $lenguaje["bitacora_label_titulo"]="BITACORA : MOST COMMON MISTAKES OF INTEGRATED";

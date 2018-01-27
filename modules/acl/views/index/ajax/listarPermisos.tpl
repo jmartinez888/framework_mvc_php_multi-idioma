@@ -36,7 +36,15 @@
                     <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-refresh estado-permiso" title="{$lenguaje.tabla_opcion_cambiar_est}"
                     id_permiso="{$rl.Per_IdPermiso}" estado="{$rl.Per_Estado}"> </a>
                     <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-edit" title="{$lenguaje.tabla_opcion_editar}" href="{$_layoutParams.root}acl/index/_eliminarPermiso/{$rl.Per_IdPermiso}"> </a>
-                    <a data-toggle="modal" data-target="#confirm-delete" href="#"  data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-trash" title="{$lenguaje.label_eliminar}" href=""> </a>
+                    <a   
+                    {if $rl.Per_Eliminar==0}
+                        data-toggle="tooltip" 
+                        class="btn btn-default btn-sm  glyphicon glyphicon-ok confirmar-habilitar-permiso" title="{$lenguaje.label_habilitar}" 
+                    {else}
+                        data-toggle="modal"  data-target="#confirm-delete"
+                        class="btn btn-default btn-sm  glyphicon glyphicon-trash confirmar-eliminar-permiso" title="{$lenguaje.label_eliminar}"
+                    {/if} 
+                    id_permiso="{$rl.Per_IdPermiso}" data-placement="bottom" > </a>
                 </td>
                 {/if}
             </tr>
@@ -46,4 +54,4 @@
     {$paginacionPermisos|default:""}
 {else}
     {$lenguaje.no_registros}
-{/if}
+{/if} 

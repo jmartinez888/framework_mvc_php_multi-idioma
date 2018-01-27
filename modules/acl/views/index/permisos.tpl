@@ -101,7 +101,16 @@
                                     <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-refresh estado-permiso" title="{$lenguaje.tabla_opcion_cambiar_est}"
                                     id_permiso="{$rl.Per_IdPermiso}" estado="{$rl.Per_Estado}"> </a>
                                     <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-edit" title="{$lenguaje.tabla_opcion_editar}" href="{$_layoutParams.root}acl/index/_eliminarPermiso/{$rl.Per_IdPermiso}"> </a>
-                                    <a data-toggle="modal" data-target="#confirm-delete" href="#"  data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-trash" title="{$lenguaje.label_eliminar}" href=""> </a>
+                                    <a   
+                                    {if $rl.Per_Eliminar==0}
+                                        data-toggle="tooltip" 
+                                        class="btn btn-default btn-sm  glyphicon glyphicon-ok confirmar-habilitar-permiso" title="{$lenguaje.label_habilitar}" 
+                                    {else}
+                                        data-book-id="{$rl.Per_Nombre}"
+                                        data-toggle="modal"  data-target="#confirm-delete"
+                                        class="btn btn-default btn-sm  glyphicon glyphicon-trash confirmar-eliminar-permiso" title="{$lenguaje.label_eliminar}"
+                                    {/if} 
+                                    id_permiso="{$rl.Per_IdPermiso}" data-placement="bottom" > </a>
                                 </td>
                                 {/if}
                             </tr>
@@ -128,12 +137,16 @@
             <div class="modal-body">
                 <p>Estás a punto de borrar un item, este procedimiento es irreversible</p>
                 <p>¿Deseas Continuar?</p>
-                <p>Eliminar: <strong class="nombre-es">{$datos.Rec_Nombre}</strong></p>
+                <p>Eliminar: <strong  class="nombre-es">Permiso</strong></p>
+                <label id="texto_" name='texto_'></label>
+                <!-- <input type='text' class='form-control' name='codigo' id='validate-number' placeholder='Codigo' required> --> 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                <a style="cursor:pointer"  id="{$datos.Rec_IdRecurso}" data-dismiss="modal" class="btn btn-danger danger eliminar_recurso">Eliminar</a>
+                <a style="cursor:pointer"  data-dismiss="modal" class="btn btn-danger danger eliminar_permiso">Eliminar</a>
             </div>
         </div>
     </div>
 </div>
+
+
