@@ -4,7 +4,7 @@
         <tr>
             <th style=" text-align: center">{$lenguaje.label_n}</th>
             <th >{$lenguaje.label_permiso} </th>
-            <th >Modulo</th>
+            <th >Módulo</th>
             <th style=" text-align: center">{$lenguaje.label_clave}</th>
             <th style=" text-align: center">{$lenguaje.label_estado}</th>                          
             {if $_acl->permiso("editar_rol")}
