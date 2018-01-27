@@ -276,69 +276,9 @@ class indexController extends aclController
         $this->_view->renderizar('ajax/gestion_idiomas_permisos', false, true);
     }
     
-   public function _cambiarEstadoPermiso($idPermiso = false,$estado = 0){
-        $this->_acl->acceso('agregar_rol');
-        if(!$this->filtrarInt($idPermiso)){            
-            $this->_view->assign('_error', 'Error parametro ID ..!!');
-            $this->_view->renderizar('index');
-            exit;
-        }
-        $this->_aclm->cambiarEstadoPermisos($this->filtrarInt($idPermiso), $this->filtrarInt($estado));
-        $this->permisos(); 
-    }*/
-    public function _eliminarPermiso($idPermiso = false)
-    {
-        $this->_acl->acceso('agregar_rol');
-        $error = "";
-        if(!$this->filtrarInt($idPermiso))
-        {            
-            $this->_view->assign('_error', 'Error parametro ID ..!!');
-            $this->_view->renderizar('index');
-            exit;
-        }
-
-        $role = $this->_aclm->verificarPermisoRol($this->filtrarInt($idPermiso));
-        //print_r($role);
-        if (!$role)
-        {
-            $usuario = $this->_aclm->verificarPermisoUsuario($this->filtrarInt($idPermiso));
-            if(!$usuario){
-                $rowCount1 = $this->_aclm->eliminarPermisosRol($this->filtrarInt($idPermiso));
-                $rowCount2 = $this->_aclm->eliminarPermisosUsuario($this->filtrarInt($idPermiso));
-                $rowCount3 = $this->_aclm->eliminarPermiso($this->filtrarInt($idPermiso));
-                // echo $rowCount3;//exit;
-
-                if($rowCount3)
-                {
-                    $error = 1;
-                    //$this->_view->assign('_mensaje', 'El permiso fue elimnado correctamente...!!!');
-                } 
-                else 
-                {
-                    $error = 'No se pudo eliminar permiso...!!!';
-                   // $this->_view->assign('_error', 'No se pudo eliminar permiso...!!!');
-                }
-                //exit;
-            } 
-            else 
-            {
-                $error = 'No se puede eliminar permiso asignado a usuario...!!!';
-                //$this->_view->assign('_error', 'No se puede eliminar permiso asignado a usuario...!!!');
-            }
-            
-        }  
-        else 
-        {
-            $error = 'No se puede eliminar permiso asignado a rol...!!!';
-           // $this->_view->assign('_error', 'No se puede eliminar permiso asignado a rol...!!!');
-          //  echo 'No se puede eliminar permiso asignado a rol...!!!';
-          //  exit;
-            //$this->_aclm->eliminarRole($this->filtrarInt($idPermiso));
-        }  
-
-        $this->redireccionar("acl/index/permisos/".$error);
-        //$this->permisos($error);
-    }
+    */
+    
+    //util
     public function permisos($error = "")
     {
         $this->_acl->acceso('listar_usuarios');
@@ -357,8 +297,17 @@ class indexController extends aclController
                 $this->_view->assign('_error',$error);
             }            
         }
-        $nombre = $this->getSql('nombre');
+        // $txtBuscar = $this->getSql('nombre');
         $pagina = $this->getInt('pagina');
+
+        //Filtro por Activos/Eliminados
+        $condicion = " ORDER BY Per_Eliminar DESC ";
+        $soloActivos = 0;
+        if (!$this->_acl->permiso('ver_eliminados')) {
+            $soloActivos = 1;
+            $condicion = " WHERE Per_Eliminar = $soloActivos ";
+        }
+        //Filtro por Activos/Eliminados
 
         $paginador = new Paginador();
         
@@ -367,11 +316,11 @@ class indexController extends aclController
               $this->nuevo_permiso();                
         }
 
-        $arrayRowCount = $this->_aclm->getPermisosRowCount();
+        $arrayRowCount = $this->_aclm->getPermisosRowCount($condicion);
         $this->_view->assign('modulos', $this->_aclm->getModulos(0,0));
-        $this->_view->assign('permisos', $this->_aclm->getPermisos($pagina,CANT_REG_PAG));
+        $this->_view->assign('permisos', $this->_aclm->getPermisos($pagina,CANT_REG_PAG,$soloActivos));
 
-        $paginador->paginar( $arrayRowCount['CantidadRegistros'],"listarPermisos", "$nombre", $pagina, CANT_REG_PAG, true);
+        $paginador->paginar( $arrayRowCount['CantidadRegistros'],"listarPermisos", "", $pagina, CANT_REG_PAG, true);
 
         $this->_view->assign('numeropagina', $paginador->getNumeroPagina());
         $this->_view->assign('paginacionPermisos', $paginador->getView('paginacion_ajax'));
@@ -384,6 +333,7 @@ class indexController extends aclController
     {
         //$this->validarUrlIdioma();
         $pagina = $this->getInt('pagina');
+        $totalRegistros = $this->getInt('total_registros');
 
         $condicion = " ";
         $soloActivos = 0;
@@ -407,13 +357,11 @@ class indexController extends aclController
             //Filtro por Activos/Eliminados
         }         
 
+
         $paginador = new Paginador();
-        $arrayRowCount = $this->_aclm->getPermisosRowCount();
-        
-        $this->_view->assign('permisos', $this->_aclm->getPermisos($pagina,CANT_REG_PAG));
+        // $arrayRowCount = $this->_aclm->getPermisosRowCount$arrayRowCount = 0,($condicion);
 
-        $paginador->paginar( $arrayRowCount['CantidadRegistros'],"listarPermisos", "$nombre", $pagina, CANT_REG_PAG, true);
-
+        $paginador->paginar( $totalRegistros,"listarPermisos", "$txtBuscar", $pagina, CANT_REG_PAG, true);
 
         $this->_view->assign('permisos', $this->_aclm->getPermisosCondicion($pagina,CANT_REG_PAG, $condicion));
         $this->_view->assign('numeropagina', $paginador->getNumeroPagina());
@@ -432,16 +380,33 @@ class indexController extends aclController
         // $nombre = $this->getSql('palabra');
         if ($txtBuscar) 
         {
-            $condicion .= " WHERE Per_Permiso LIKE '%$nombre%' ";
-        }
+            $condicion = " WHERE Per_Nombre liKe '%$txtBuscar%' ";
+            if (!$this->_acl->permiso('ver_eliminados')) {
+                $soloActivos = 1;
+                $condicion .= " AND Per_Eliminar = $soloActivos ";
+            }
+            $condicion .= " ORDER BY Per_Eliminar DESC  ";
+        } else {
+            //Filtro por Activos/Eliminados     
+            $condicion = " ORDER BY Per_Eliminar DESC ";   
+            if (!$this->_acl->permiso('ver_eliminados')) {
+                $soloActivos = 1;
+                $condicion = " WHERE Per_Eliminar = $soloActivos  ";
+            }
+
+            //Filtro por Activos/Eliminados
+        }        
+
 
         $paginador = new Paginador();
 
-        $arrayRowCount = $this->_aclm->getPermisosRowCount();
-        
-        $this->_view->assign('permisos', $this->_aclm->getPermisos($pagina,CANT_REG_PAG));
+        $arrayRowCount = $this->_aclm->getPermisosRowCount($condicion);
+        $totalRegistros = $arrayRowCount['CantidadRegistros'];
+        // echo($totalRegistros);
+        // print_r($arrayRowCount); echo($condicion);exit;
+        $this->_view->assign('permisos', $this->_aclm->getPermisosCondicion($pagina,CANT_REG_PAG, $condicion));
 
-        $paginador->paginar( $arrayRowCount['CantidadRegistros'],"listarPermisos", "$nombre", $pagina, CANT_REG_PAG, true);
+        $paginador->paginar( $totalRegistros ,"listarPermisos", "$txtBuscar", $pagina, CANT_REG_PAG, true);
 
         $this->_view->assign('numeropagina', $paginador->getNumeroPagina());
         $this->_view->assign('paginacionPermisos', $paginador->getView('paginacion_ajax'));

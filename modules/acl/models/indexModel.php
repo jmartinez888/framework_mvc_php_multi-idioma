@@ -314,44 +314,19 @@ class indexModel extends Model
         }
     }
     
-
-    //UTILIZO
-    public function getPermisos($pagina,$registrosXPagina)
+    //Util Permisos
+    public function getPermisos($pagina,$registrosXPagina,$activos = 0)
     {
         try{
-            $sql = "call s_s_listar_permisos_con_modulo(?,?)";
+            $sql = "call s_s_listar_permisos_con_modulo(?,?,?)";
             $result = $this->_db->prepare($sql);
             $result->bindParam(1, $pagina, PDO::PARAM_INT);
             $result->bindParam(2, $registrosXPagina, PDO::PARAM_INT);
+            $result->bindParam(3, $activos, PDO::PARAM_INT);
             $result->execute();
             return $result->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $exception) {
             $this->registrarBitacora("acl(indexModel)", "getPermisos", "Error Model", $exception);
-            return $exception->getTraceAsString();
-        }
-    }
-
-    public function getModulos(){
-        try{
-            $sql = "call s_s_listar_modulos()";
-            $result = $this->_db->prepare($sql);
-            $result->execute();
-            return $result->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $exception) {
-            $this->registrarBitacora("acl(indexModel)", "getModulos", "Error Model", $exception);
-            return $exception->getTraceAsString();
-        }
-    }
-
-    public function getPermisosRowCount($condicion = "")
-    {
-        try{
-            $sql = " SELECT COUNT(p.Per_IdPermiso) AS CantidadRegistros FROM permisos p LEFT JOIN modulo m ON p.Mod_IdModulo = m.Mod_IdModulo  $condicion ";
-            $result = $this->_db->prepare($sql);
-            $result->execute();
-            return $result->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $exception) {
-            $this->registrarBitacora("acl(indexModel)", "getPermisosRowCount", "Error Model", $exception);
             return $exception->getTraceAsString();
         }
     }
