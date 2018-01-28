@@ -2,7 +2,8 @@
 SQLyog Enterprise - MySQL GUI v8.1 
 MySQL - 5.5.5-10.1.28-MariaDB : Database - mvc_php
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -273,7 +274,7 @@ insert  into `usuario_rol`(Usu_IdUsuario,Rol_IdRol,Usr_Valor) values (1,1,1),(1,
 
 /* Function  structure for function  `fn_devolverIdioma` */
 
-/*!50003 DROP FUNCTION IF EXISTS `fn_devolverIdioma` */;
+/*!50003 DROP FUNCTION IF EXISTS `fn_devolverIdioma` ;*/
 DELIMITER $$
 
 !50003 CREATE DEFINER=`root`@`localhost` FUNCTION `fn_devolverIdioma`(Tabla VARCHAR(50), Registro INT(11),idioma char(5), IdiomaOriginal char(5)) RETURNS char(5) CHARSET utf8
