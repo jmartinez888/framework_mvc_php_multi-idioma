@@ -17,9 +17,8 @@ define('LAYOUT_FRONTEND', 'frontend');
 define('ROOT_ARCHIVO_FISICO',$_SERVER['DOCUMENT_ROOT'].'/framework_mvc_php_multidioma/files/');
 define('URL_ARCHIVO_FISICO',BASE_URL.'archivosFisicos/');
 define('LENGUAJE', 'es');
-define('CANT_REG_PAG', 1);#Indica la cantidad de fila que se listaran al cargar un arreglo
-#define('LIST_REG_PAG', [CANT_REG_PAG,50,100,250,500,1000,2500,5000]);
-define('LIST_REG_PAG', [CANT_REG_PAG,2,3,4,5,6,7,8]);
+define('CANT_REG_PAG', 25);#Indica la cantidad de fila que se listaran al cargar un arreglo
+define('LIST_REG_PAG', [CANT_REG_PAG,50,100,250,500,1000,2500,5000]);
 
 define('APP_NAME', 'PHP MVC');
 define('APP_SLOGAN', 'Framework MVC en PHP');
