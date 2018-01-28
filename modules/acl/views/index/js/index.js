@@ -65,7 +65,8 @@ $(document).on('ready', function () {
                     _Per_IdPermiso: _id_permiso,
                     _Per_Estado: _estado,
                     pagina: $(".pagination .active span").html(),
-                    palabra: $("#palabraPermiso").val()
+                    palabra: $("#palabraPermiso").val(),
+                    filas:$("#s_filas_"+'listarPermisos').val()
                 },
         function(data) {
             $("#cargando").hide();
@@ -114,7 +115,8 @@ $(document).on('ready', function () {
                     _Per_IdPermiso: _Per_IdPermiso_,
                     _Per_Eliminar: _Per_Eliminar_,
                     pagina: $(".pagination .active span").html(),
-                    palabra: $("#palabraPermiso").val()
+                    palabra: $("#palabraPermiso").val(),
+                    filas:$("#s_filas_"+'listarPermisos').val()
                 },
         function(data) {
             $("#cargando").hide();
