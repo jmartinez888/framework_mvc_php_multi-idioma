@@ -16,8 +16,11 @@ $(document).on('ready', function () {
     $('body').on('click', '.pagina', function () {
         paginacion($(this).attr("pagina"), $(this).attr("nombre"), $(this).attr("parametros"),$(this).attr("total_registros"));
     });
+    $('body').on('change', '.s_filas', function () {
+        paginacion($(this).attr("pagina"), $(this).attr("nombre"), $(this).attr("parametros"),$(this).attr("total_registros"));
+    });
     var paginacion = function (pagina, nombrelista, datos,total_registros) {
-        var pagina = {'pagina':pagina,'total_registros':total_registros};
+        var pagina = {'pagina':pagina,'filas':$("#s_filas_"+nombrelista).val(),'total_registros':total_registros};
         
         $.post(_root_ + 'acl/index/_paginacion_' + nombrelista + '/' + datos, pagina, function (data) {
             $("#" + nombrelista).html('');
@@ -62,7 +65,8 @@ $(document).on('ready', function () {
                     _Per_IdPermiso: _id_permiso,
                     _Per_Estado: _estado,
                     pagina: $(".pagination .active span").html(),
-                    palabra: $("#palabraPermiso").val()
+                    palabra: $("#palabraPermiso").val(),
+                    filas:$("#s_filas_"+'listarPermisos').val()
                 },
         function(data) {
             $("#cargando").hide();
@@ -111,7 +115,8 @@ $(document).on('ready', function () {
                     _Per_IdPermiso: _Per_IdPermiso_,
                     _Per_Eliminar: _Per_Eliminar_,
                     pagina: $(".pagination .active span").html(),
-                    palabra: $("#palabraPermiso").val()
+                    palabra: $("#palabraPermiso").val(),
+                    filas:$("#s_filas_"+'listarPermisos').val()
                 },
         function(data) {
             $("#cargando").hide();

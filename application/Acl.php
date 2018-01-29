@@ -116,9 +116,10 @@ class ACL
         {
             try{
                 $sql = "call s_s_listar_permisos_usuario_x_id_usuario(?,?)";
+                $idPermisos=implode(",", $idPermisos);
                 $result = $this->_db->prepare($sql);
                 $result->bindParam(1, $this->_Usu_IdUsuario, PDO::PARAM_INT);
-                $result->bindParam(2, implode(",", $idPermisos), PDO::PARAM_STR);
+                $result->bindParam(2, $idPermisos, PDO::PARAM_STR);
                 $result->execute();
                 $permisos = $result->fetchAll(PDO::FETCH_ASSOC);
             } catch (PDOException $exception) {
