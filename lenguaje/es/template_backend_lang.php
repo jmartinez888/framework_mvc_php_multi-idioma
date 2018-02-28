@@ -15,6 +15,7 @@ $lenguaje["menu_izquierdo_1_3"]="USUARIOS";
 $lenguaje["menu_izquierdo_1_3_1"]="Usuarios";
 $lenguaje["menu_izquierdo_1_3_2"]="Roles";
 $lenguaje["menu_izquierdo_1_3_3"]="Permisos";
+$lenguaje["menu_izquierdo_1_3_4"]="Módulos";
 $lenguaje["menu_izquierdo_1_4"]="BITACORA";
 $lenguaje["menu_izquierdo_1_5"]="ESTADISTICAS";
 $lenguaje["menu_izquierdo_1_5_1"]="Visitas";

@@ -28,7 +28,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
               apply the skin class to the body tag so the changes take effect.
         -->
         <link href="{$_layoutParams.ruta_css}/skins/skin-green.min.css" rel="stylesheet" type="text/css" />
-        <link href="{$_layoutParams.ruta_css}/jsoft-backend.css" rel="stylesheet" type="text/css" />
+        <link href="{$_layoutParams.ruta_css}/jm-backend.css" rel="stylesheet" type="text/css" />
+        <!-- <link href="{$_layoutParams.ruta_css}/jsoft-backend.css" rel="stylesheet" type="text/css" /> -->
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -139,7 +140,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         <li class="header">{$lenguaje.menu_izquierdo_1}</li>
                         <!-- Optionally, you can add icons to the links -->
                         {if $_acl->permiso("listar_arquitectura_web")}
-                        <li class="active"><a href="{$_layoutParams.root}arquitectura"><i class='fa fa-gears'></i> <span>{$lenguaje.menu_izquierdo_1_1}</span></a></li>
+                        <li ><a href="{$_layoutParams.root}arquitectura"><i class='fa fa-gears'></i> <span>{$lenguaje.menu_izquierdo_1_1}</span></a></li>
                         {/if}
                         <li><a href="#"><i class='glyphicon glyphicon-comment'></i> <span>{$lenguaje.menu_izquierdo_1_2}</span></a></li>
                         {if $_acl->permiso("listar_usuarios")}
@@ -149,6 +150,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                                 <li><a href="{$_layoutParams.root}usuarios">{$lenguaje.menu_izquierdo_1_3_1}</a></li>
                                 <li><a href="{$_layoutParams.root}acl/index/roles">{$lenguaje.menu_izquierdo_1_3_2}</a></li>
                                 <li><a href="{$_layoutParams.root}acl/index/permisos">{$lenguaje.menu_izquierdo_1_3_3}</a></li>
+                                <li><a href="{$_layoutParams.root}acl/index/modulos">{$lenguaje.menu_izquierdo_1_3_4}</a></li>
                             </ul>              
                         </li>
                         {/if}
@@ -172,21 +174,15 @@ scratch. This page gets rid of all links and provides the needed markup only.
                         {/if}
                         {if $_acl->permiso("listar_estandar")}
                         <li class=""><a href="{$_layoutParams.root}estandar"><i class='fa fa-database'></i> <span>{$lenguaje.menu_izquierdo_2_3}</span></a></li>
-                        {/if}     
-
+                        {/if}   
+                        {if $_acl->permiso("listar_recurso")}
+                        <li class=""><a href="{$_layoutParams.root}bdrecursos"><i class='glyphicon glyphicon-globe'></i> <span>{$lenguaje.menu_izquierdo_2_1}</span></a></li>
+                        {/if}  
+                        {if $_acl->permiso("listar_documentos")}
+                        <li class=""><a href="{$_layoutParams.root}dublincore/documentos"><i class='glyphicon glyphicon-globe'></i> <span>{$lenguaje.menu_izquierdo_2_1}</span></a></li>
+                        {/if} 
                             
                     </ul>
-
-                    <ul class="sidebar-menu">
-                        <li class="header">{$lenguaje.menu_izquierdo_1}</li>
-                        {if $_acl->permiso("listar_usuarios")}
-                        <li class="treeview">
-                            <a href="#"><i class='glyphicon glyphicon-user'></i> <span>POrueba</span> <i class="fa fa-angle-left pull-right"></i></a>
-                            <ul class="treeview-menu">
-                                <li><a href="{$_layoutParams.root}visitacopia">Luchito</a></li>
-                        </li>
-                        {/if} 
-                        </ul>
                     <!-- /.sidebar-menu -->
                 </section>
                 <!-- /.sidebar -->
@@ -229,7 +225,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     </div>   
                     {include file=$_contenido} 
                     <!-- Your Page Content Here -->
-
                 </section><!-- /.content -->
             </div><!-- /.content-wrapper -->
 

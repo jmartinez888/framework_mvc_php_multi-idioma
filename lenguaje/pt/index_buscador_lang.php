@@ -1,6 +1,6 @@
 <?php
 
-$lenguaje["buscador_titulo"]="PESQUISA SII GEF OTCA";
+$lenguaje["buscador_titulo"]="PESQUISA ORA";
 $lenguaje["buscador_resultado1"]="Eles foram encontrados";
 $lenguaje["buscador_resultado2"]="resultados com a palavra";
 $lenguaje["buscador_listado_titulo"]="LISTA DE PESQUISA";

@@ -39,7 +39,7 @@
                         {if isset($roles) && count($roles)}
                             <select class="form-control" name="Rol_IdRol" id="Rol_IdRol" >
                                 {foreach item=r from=$roles}
-                                    <option  value="{$r.Rol_IdRol|default:0}"  {if $r.Rol_role == $datos.Rol_role}selected="selected"{/if}>{$r.Rol_role|default:"select"}</option>
+                                    <option  value="{$r.Rol_IdRol|default:0}"  {if $r.Rol_Nombre == 1}selected="selected"{/if}>{$r.Rol_Nombre|default:"select"}</option>
                                 {/foreach}            
                             </select>
                         {/if}

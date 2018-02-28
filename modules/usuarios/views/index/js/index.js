@@ -20,16 +20,22 @@ $(document).on('ready', function () {
     });
     
     $('body').on('click', '.pagina', function () {
-        paginacion($(this).attr("pagina"), $(this).attr("nombre"), $(this).attr("parametros"));
+        $("#cargando").show();
+        paginacion($(this).attr("pagina"), $(this).attr("nombre"), $(this).attr("parametros"),$(this).attr("total_registros"));
     });
-    var paginacion = function (pagina, nombrelista, datos) {
-        var pagina = 'pagina=' + pagina;
-
-        $.post(_root_ + 'usuarios/index/_paginacion_' + nombrelista + '/' + datos, pagina, function (data) {
+    $('body').on('change', '.s_filas', function () {
+        $("#cargando").show();
+        paginacion($(this).attr("pagina"), $(this).attr("nombre"), $(this).attr("parametros"),$(this).attr("total_registros"));
+    });
+    var paginacion = function (pagina, nombrelista, datos,total_registros) {
+        var pagina = {'pagina':pagina,'filas':$("#s_filas_"+nombrelista).val(),'total_registros':total_registros};
+        
+        $.post(_root_ + 'acl/index/_paginacion_' + nombrelista + '/' + datos, pagina, function (data) {
             $("#" + nombrelista).html('');
+            $("#cargando").hide();
             $("#" + nombrelista).html(data);
         });
-    }
+    }  
     
     $("body").on('click', "#btn_nuevoRol", function () {
         nuevoDivRol();

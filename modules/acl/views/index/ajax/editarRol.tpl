@@ -20,17 +20,20 @@
             </div>
             <div id="nuevo_rol" class="panel-body" style="width: 90%; margin: 0px auto">
                 <form class="form-horizontal" data-toggle="validator" id="form3" role="form" name="form1" action="" method="post" >
-                    <input type="hidden" id="idRol" name="idRol" value="{$datos.Rol_IdRol}" />
+                    <input type="hidden" id="Rol_IdRol" name="Rol_IdRol" value="{$datos.Rol_IdRol}" />
                     <input type="hidden" id="idIdiomaSeleccionado" name="idIdiomaSeleccionado" value="{$datos.Idi_IdIdioma}" />
                     <div class="form-group">
                         <label class="col-lg-2 control-label">{$lenguaje.label_nombre_rol} : </label>
                         <div class="col-lg-10">
-                            <input class="form-control"  value="{$datos.Rol_role}" id="editarRol"  type="text" name="editarRol" placeholder="{$lenguaje.label_rol}" required="" />
+                            <input class="form-control"  value="{$datos.Rol_Nombre}" id="Rol_Nombre"  type="text" name="Rol_Nombre" placeholder="{$lenguaje.label_rol}" required="" />
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-lg-offset-2 col-lg-10">
+                        <div class="col-xs-6 col-sm-2 col-lg-offset-2 col-lg-2">
                             <button class="btn btn-success" type="submit" id="bt_editarRol" name="bt_editarRol" ><i class="glyphicon glyphicon-floppy-disk"> </i>&nbsp; {$lenguaje.button_ok}</button>
+                        </div>
+                        <div class="col-xs-6 col-sm-offset-1 col-sm-2 col-lg-2">
+                            <button class="btn btn-danger" type="submit" id="bt_cancelarEditarRol" name="bt_cancelarEditarRol" ><i class="glyphicon glyphicon-remove"> </i>&nbsp; {$lenguaje.button_cancel}</button>
                         </div>
                     </div>
                 </form>

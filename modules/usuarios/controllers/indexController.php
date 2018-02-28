@@ -6,7 +6,8 @@ class indexController extends usuariosController {
 
     public function __construct($lang, $url) {
         parent::__construct($lang, $url);
-        $this->_usuarios = $this->loadModel('index');
+        $this->_aclm = $this->loadModel('index', 'acl');
+        $this->_usuarios = $this->loadModel('usuario');
     }
 
     public function index($PermisoVacio = false) {
@@ -23,15 +24,36 @@ class indexController extends usuariosController {
         if ($this->botonPress("bt_guardar")) {
             $this->registrarUsuario();                
         }
+
+        //Filtro por Activos/Eliminados
+        $condicion = " ORDER BY u.Row_Eliminar DESC ";
+        $soloActivos = 0;
+        if (!$this->_acl->permiso('ver_eliminados')) {
+            $soloActivos = 1;
+            $condicion = " WHERE u.Row_Eliminar = $soloActivos ";
+        }
+        //Filtro por Activos/Eliminados
+        $condicion .= " LIMIT 0," . CANT_REG_PAG . " ";
+        // echo $condicion; exit;
+        $arrayRowCount = $this->_usuarios->getUsuariosRowCount($condicion);
+        // print_r($arrayRowCount);
+        $totalRegistros = $arrayRowCount['CantidadRegistros'];
+
         $paginador = new Paginador();
-        $this->_view->assign('usuarios', $paginador->paginar($this->_usuarios->getUsuarios(), "listaregistros", "$nombre", $pagina, 25));
-        $this->_view->assign('roles', $this->_usuarios->getRoles());
+
+        $this->_view->assign('usuarios', $this->_usuarios->getUsuariosPaginado($condicion));
+
+        $paginador->paginar( $totalRegistros,"listaregistros", "", $pagina, CANT_REG_PAG, true);
+
+        // $this->_view->assign('usuarios', $paginador->paginar($this->_usuarios->getUsuarios(), "listaregistros", "$nombre", $pagina, 25));
+
+        $this->_view->assign('roles', $this->_aclm->getRolesCompleto());
         $this->_view->assign('numeropagina', $paginador->getNumeroPagina());
         //$this->_view->assign('cantidadporpagina',$registros);
-        $this->_view->assign('paginacion', $paginador->getView('paginacion_ajax'));
-        if($PermisoVacio){
-            $this->_view->assign('_error', 'Error al editar Debe agregar permisos al Usuario');
-        }        
+        $this->_view->assign('paginacion', $paginador->getView('paginacion_ajax_s_filas'));
+        // if($PermisoVacio){
+        //     $this->_view->assign('_error', 'Error al editar Debe agregar permisos al Usuario');
+        // }        
         $this->_view->renderizar('index','usuarios');
     }
 
@@ -43,16 +65,34 @@ class indexController extends usuariosController {
         $condicion = "";
         //$nombre = $this->getSql('nombre');
         if ($nombre) {
-            $condicion .= " and Usu_Usuario liKe '%$nombre%' ";
+            $condicion .= " AND Usu_Usuario liKe '%$nombre%' ";
         }
+
+        //Filtro por Activos/Eliminados
+        $condicion = " ORDER BY u.Row_Eliminar DESC ";
+        $soloActivos = 0;
+        if (!$this->_acl->permiso('ver_eliminados')) {
+            $soloActivos = 1;
+            $condicion = " WHERE u.Row_Eliminar = $soloActivos ";
+        }
+        //Filtro por Activos/Eliminados
+        $condicion .= " LIMIT 0," . CANT_REG_PAG . " ";
+        // echo $condicion; exit;
+        $arrayRowCount = $this->_usuarios->getUsuariosRowCount($condicion);
+        // print_r($arrayRowCount);
+        $totalRegistros = $arrayRowCount['CantidadRegistros'];
 
         $paginador = new Paginador();
 
-        $this->_view->assign('usuarios', $paginador->paginar($this->_usuarios->getUsuarios($condicion), "listaregistros", "$nombre", $pagina, 25));
+        $this->_view->assign('usuarios', $this->_usuarios->getUsuariosPaginado($condicion));
+
+        $paginador->paginar( $totalRegistros,"listaregistros", "", $pagina, CANT_REG_PAG, true);
+
+        // $this->_view->assign('usuarios', $paginador->paginar($this->_usuarios->getUsuarios(), "listaregistros", "$nombre", $pagina, 25));
 
         $this->_view->assign('numeropagina', $paginador->getNumeroPagina());
         //$this->_view->assign('cantidadporpagina',$registros);
-        $this->_view->assign('paginacion', $paginador->getView('paginacion_ajax'));
+        $this->_view->assign('paginacion', $paginador->getView('paginacion_ajax_s_filas'));
         $this->_view->renderizar('ajax/listaregistros', false, true);
     }
 
@@ -64,10 +104,10 @@ class indexController extends usuariosController {
         $condicion = "";
 
         if ($nombre) {
-            $condicion .= " and Usu_Usuario liKe '%$nombre%' ";
+            $condicion .= " AND Usu_Usuario liKe '%$nombre%' ";
         }
         if ($idRol>0) {
-            $condicion .= " and u.Rol_IdRol = $idRol ";
+            $condicion .= " AND u.Rol_IdRol = $idRol ";
         }
        // echo $condicion;exit;
       // print_r($this->_usuarios->getUsuarios($condicion));exit;
@@ -107,15 +147,14 @@ class indexController extends usuariosController {
             $idUsuario = $this->_usuarios->registrarUsuario(
                 $this->getSql('nombre'),
                 $this->getSql('apellidos'),
-                $this->getSql('dni'),
+                $this->getInt('dni'),
                 $this->getSql('direccion'),
                 $this->getSql('telefono'),
                 $this->getSql('institucion'),
                 $this->getSql('cargo'),
                 $this->getAlphaNum('usuario'),
                 $this->getSql('contrasena'),
-                $this->getSql('email'),
-                45, 1, $random 
+                $this->getSql('email'), 1, $random 
             );
         }
         
@@ -134,6 +173,7 @@ class indexController extends usuariosController {
             }            
         }                
     }
+
 
     public function _cambiarEstado($idUsusario = false,$estado = false){
         if(!$this->filtrarInt($idUsusario)){            
@@ -205,7 +245,7 @@ class indexController extends usuariosController {
             $this->_view->renderizar('rol');
         }        
     }
-
+    //Modificado Jhon Martinez
     public function permisos($usuarioID) {
         $this->_acl->acceso('agregar_rol');
         $this->validarUrlIdioma();
@@ -258,7 +298,7 @@ class indexController extends usuariosController {
         }
 
         $permisosUsuario = $this->_usuarios->getPermisosUsuario($id);
-        $permisosRole = $this->_usuarios->getPermisosRole($id);
+        $permisosRole = $this->_usuarios->getPermisosRoles($id);
         
         if (!$permisosUsuario || !$permisosRole) {
             $this->redireccionar('usuarios/index/index/vacio');
@@ -267,8 +307,9 @@ class indexController extends usuariosController {
         $this->_view->assign('titulo', 'Permisos de usuario');
         $this->_view->assign('permisos', array_keys($permisosUsuario));
         $this->_view->assign('usuario', $permisosUsuario);
-        $this->_view->assign('role', $permisosRole);
+        $this->_view->assign('roles', $permisosRole);
         $this->_view->assign('info', $this->_usuarios->getUsuario($id));
+        $this->_view->assign('numeropagina', 1);
 
         $this->_view->renderizar('permisos','permisos');
     }

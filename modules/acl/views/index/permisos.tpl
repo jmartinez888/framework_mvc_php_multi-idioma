@@ -69,15 +69,15 @@
                         <tr>
                             <th style=" text-align: center">{$lenguaje.label_n}</th>
                             <th >{$lenguaje.label_permiso} </th>
-                            <th >Módulo</th>
+                            <th >{$lenguaje.label_modulo} </th>
                             <th style=" text-align: center">{$lenguaje.label_clave}</th>
-                            <th style=" text-align: center">{$lenguaje.label_estado}</th>                          
+                            <th style=" text-align: center">{$lenguaje.label_estado}</th>
                             {if $_acl->permiso("editar_rol")}
                             <th style=" text-align: center">{$lenguaje.label_opciones}</th>
                             {/if}
                         </tr>
                         {foreach item=rl from=$permisos}
-                            <tr {if $rl.Per_Eliminar==0}
+                            <tr {if $rl.Row_Eliminar==0}
                                     {if $_acl->permiso("ver_eliminados")}
                                         class="btn-danger"
                                     {else}
@@ -100,9 +100,9 @@
                                 <td style=" text-align: center">
                                     <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-refresh estado-permiso" title="{$lenguaje.tabla_opcion_cambiar_est}"
                                     id_permiso="{$rl.Per_IdPermiso}" estado="{$rl.Per_Estado}"> </a>
-                                    <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-edit" title="{$lenguaje.tabla_opcion_editar}" href="{$_layoutParams.root}acl/index/_eliminarPermiso/{$rl.Per_IdPermiso}"> </a>
+                                    <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-edit" title="{$lenguaje.tabla_opcion_editar}" href="{$_layoutParams.root}acl/index/editarPermiso/{$rl.Per_IdPermiso}"> </a>
                                     <a   
-                                    {if $rl.Per_Eliminar==0}
+                                    {if $rl.Row_Eliminar==0}
                                         data-toggle="tooltip" 
                                         class="btn btn-default btn-sm  glyphicon glyphicon-ok confirmar-habilitar-permiso" title="{$lenguaje.label_habilitar}" 
                                     {else}

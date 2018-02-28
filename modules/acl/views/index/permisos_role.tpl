@@ -8,7 +8,7 @@
             </h3>
         </div>
         <div class="panel-body" style=" margin: 15px">
-             <h4><i class="fa fa-user-secret"></i>&nbsp;&nbsp; <b>{$lenguaje.label_rol} :</b> {$role.Rol_role}</h4>
+             <h4><i class="fa fa-user-secret"></i>&nbsp;&nbsp; <b>{$lenguaje.label_rol} :</b> {$role.Rol_Nombre}</h4>
             <form name="form1" method="post" action="">
                 <input type="hidden" name="guardar" value="1" />
                
@@ -34,8 +34,11 @@
                     </table>
                 </div>
                 <div class="form-group">
-                    <div class="col-lg-offset-2 col-lg-10">
+                    <div class="col-xs-6 col-sm-2 col-lg-offset-2 col-lg-2">
                         <button class="btn btn-success" type="submit" ><i class="glyphicon glyphicon-floppy-disk"> </i>&nbsp; {$lenguaje.button_ok}</button>
+                    </div>
+                    <div class="col-xs-6 col-sm-offset-1 col-sm-2 col-lg-2">
+                        <button class="btn btn-danger" type="submit" id="bt_cancelarEditarRol" name="bt_cancelarEditarRol" ><i class="glyphicon glyphicon-remove"> </i>&nbsp; {$lenguaje.button_cancel}</button>
                     </div>
                 </div>
                 {else}

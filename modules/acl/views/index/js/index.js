@@ -14,9 +14,11 @@ $(document).on('ready', function () {
     // });
     
     $('body').on('click', '.pagina', function () {
+        $("#cargando").show();
         paginacion($(this).attr("pagina"), $(this).attr("nombre"), $(this).attr("parametros"),$(this).attr("total_registros"));
     });
     $('body').on('change', '.s_filas', function () {
+        $("#cargando").show();
         paginacion($(this).attr("pagina"), $(this).attr("nombre"), $(this).attr("parametros"),$(this).attr("total_registros"));
     });
     var paginacion = function (pagina, nombrelista, datos,total_registros) {
@@ -24,25 +26,29 @@ $(document).on('ready', function () {
         
         $.post(_root_ + 'acl/index/_paginacion_' + nombrelista + '/' + datos, pagina, function (data) {
             $("#" + nombrelista).html('');
+            $("#cargando").hide();
             $("#" + nombrelista).html(data);
         });
     }  
     
-    $("body").on('click', "#buscar", function () {        
-        buscarRol($("#palabra").val());
-    });
-    $("body").on('click', "#buscarPermiso", function () {        
-        buscarPermiso($("#palabraPermiso").val());
-    });    
     $("body").on('click', ".idioma_s", function () {
         var id = $(this).attr("id");
         var idIdioma = $("#hd_" + id).val();
         gestionIdiomas($("#idRol").val(), $("#idIdiomaOriginal").val(), idIdioma);
     });
 
+    $('#confirm-delete').on('show.bs.modal', function(e) { 
+        var bookId = $(e.relatedTarget).data('book-id'); 
+         $(e.currentTarget).find("#texto_").html(bookId);
+    }); 
+
+    //PERMISOS
+    $("body").on('click', "#buscarPermiso", function () { 
+        $("#cargando").show();       
+        buscarPermiso($("#palabraPermiso").val());
+    }); 
 
     $("body").on('click', '.estado-permiso', function() {
-
         $("#cargando").show();
         if (_post && _post.readyState != 4) {
             _post.abort();
@@ -69,9 +75,10 @@ $(document).on('ready', function () {
                     filas:$("#s_filas_"+'listarPermisos').val()
                 },
         function(data) {
-            $("#cargando").hide();
             $("#listarPermisos").html('');
+            $("#cargando").hide();
             $("#listarPermisos").html(data);
+            // mensaje(JSON.parse(data));
         });
     });
 
@@ -87,12 +94,29 @@ $(document).on('ready', function () {
         }
 
         _Per_IdPermiso_ = _id_permiso;
-        _Per_Eliminar_ = 0;
+        _Row_Eliminar_ = 0;
+    });
 
+    $("body").on('click', '.eliminar_permiso', function() {
+        $("#cargando").show();
+        // _Per_IdPermiso = _eliminar;
+        _post = $.post(_root_ + 'acl/index/_eliminarPermiso',
+                {                    
+                    _Per_IdPermiso: _Per_IdPermiso_,
+                    _Row_Eliminar: _Row_Eliminar_,
+                    pagina: $(".pagination .active span").html(),
+                    palabra: $("#palabraPermiso").val(),
+                    filas:$("#s_filas_"+'listarPermisos').val()
+                },
+        function(data) {
+            $("#listarPermisos").html('');
+            $("#cargando").hide();
+            $("#listarPermisos").html(data);
+        });
     });
 
     $("body").on('click', '.confirmar-habilitar-permiso', function() {
-        
+        $("#cargando").show();
         if (_post && _post.readyState != 4) {
             _post.abort();
         }
@@ -103,34 +127,126 @@ $(document).on('ready', function () {
         }
 
         _Per_IdPermiso_ = _id_permiso;
-        _Per_Eliminar_ = 1;
-
-    });
-
-    $("body").on('click', '.eliminar_permiso', function() {
-        $("#cargando").show();
-        // _Per_IdPermiso = _eliminar;
+        _Row_Eliminar_ = 1;
+        
         _post = $.post(_root_ + 'acl/index/_eliminarPermiso',
                 {                    
                     _Per_IdPermiso: _Per_IdPermiso_,
-                    _Per_Eliminar: _Per_Eliminar_,
+                    _Row_Eliminar: _Row_Eliminar_,
                     pagina: $(".pagination .active span").html(),
                     palabra: $("#palabraPermiso").val(),
                     filas:$("#s_filas_"+'listarPermisos').val()
                 },
         function(data) {
-            $("#cargando").hide();
             $("#listarPermisos").html('');
+            $("#cargando").hide();
             $("#listarPermisos").html(data);
         });
-
     });
-    $('#confirm-delete').on('show.bs.modal', function(e) { 
-        var bookId = $(e.relatedTarget).data('book-id'); 
-         $(e.currentTarget).find("#texto_").html(bookId);
-        // $(e.currentTarget).find('input[name="codigo"]').val(bookId); 
-         // $(e.currentTarget).find('label[name="codigo"]').html(bookId); 
-    }); 
+
+
+    //----------------------ROLES-------------------//
+    $("body").on('click', "#buscar", function () {  
+        $("#cargando").show();     
+        buscarRol($("#palabraRol").val());
+    });
+
+    $("body").on('click', '.estado-rol', function() {
+        $("#cargando").show();
+        if (_post && _post.readyState != 4) {
+            _post.abort();
+        }
+
+        _id_rol = $(this).attr("id_rol");
+        if (_id_rol === undefined) {
+            _id_rol = 0;
+        }
+        _estado = $(this).attr("estado");
+        if (_estado === undefined) {
+            _estado = 0;
+        }
+        if (!_estado) {
+            _estado = 0;
+        }
+
+        _post = $.post(_root_ + 'acl/index/_cambiarEstadoRol',
+                {                    
+                    _Rol_IdRol: _id_rol,
+                    _Rol_Estado: _estado,
+                    pagina: $(".pagination .active span").html(),
+                    palabra: $("#palabraRol").val(),
+                    filas:$("#s_filas_"+'listarRoles').val()
+                },
+        function(data) {
+            $("#listarRoles").html('');
+            $("#cargando").hide();
+            $("#listarRoles").html(data);
+            // mensaje(JSON.parse(data));
+        });
+    });
+
+    $("body").on('click', '.confirmar-eliminar-rol', function() {
+        
+        if (_post && _post.readyState != 4) {
+            _post.abort();
+        }
+
+        _id_rol = $(this).attr("id_rol");
+        if (_id_rol === undefined) {
+            _id_rol = 0;
+        }
+
+        _Rol_IdRol_ = _id_rol;
+        _Row_Eliminar_ = 0;
+    });
+
+    $("body").on('click', '.eliminar_rol', function() {
+        $("#cargando").show();
+        // _Per_IdPermiso = _eliminar;
+        _post = $.post(_root_ + 'acl/index/_eliminarRol',
+                {                    
+                    _Rol_IdRol: _Rol_IdRol_,
+                    _Row_Eliminar: _Row_Eliminar_,
+                    pagina: $(".pagination .active span").html(),
+                    palabra: $("#palabraRol").val(),
+                    filas:$("#s_filas_"+'listarRoles').val()
+                },
+        function(data) {
+            $("#listarRoles").html('');
+            $("#cargando").hide();
+            $("#listarRoles").html(data);
+        });
+    });
+
+    $("body").on('click', '.confirmar-habilitar-rol', function() {
+        $("#cargando").show();
+        if (_post && _post.readyState != 4) {
+            _post.abort();
+        }
+
+        _id_rol = $(this).attr("id_rol");
+        if (_id_rol === undefined) {
+            _id_rol = 0;
+        }
+
+        _Rol_IdRol_ = _id_rol;
+        _Row_Eliminar_ = 1;
+        
+        _post = $.post(_root_ + 'acl/index/_eliminarRol',
+                {                    
+                    _Rol_IdRol: _Rol_IdRol_,
+                    _Row_Eliminar: _Row_Eliminar_,
+                    pagina: $(".pagination .active span").html(),
+                    palabra: $("#palabraRol").val(),
+                    filas:$("#s_filas_"+'listarRoles').val()
+                },
+        function(data) {
+            $("#listarRoles").html('');
+            $("#cargando").hide();
+            $("#listarRoles").html(data);
+        });
+    });
+
 
 });
 function buscarRol(criterio) {
@@ -140,16 +256,19 @@ function buscarRol(criterio) {
         
     }, function (data) {
         $("#listaregistros").html('');
-        $("#listaregistros").html(data);
+        $("#cargando").hide();
+        $("#listarRoles").html(data);
     });
 }
 function buscarPermiso(criterio) {
+    $("#cargando").show();
     $.post(_root_ + 'acl/index/_buscarPermiso',
     {
         palabra:criterio
         
     }, function (data) {
         $("#listarPermisos").html('');
+        $("#cargando").hide();
         $("#listarPermisos").html(data);
     });
 }

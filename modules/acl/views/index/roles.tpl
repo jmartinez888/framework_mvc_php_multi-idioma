@@ -34,42 +34,63 @@
         <div class="panel-body" style=" margin: 15px">
             <div class="row" style="text-align:right">
                 <div style="display:inline-block;padding-right:2em">
-                    <input class="form-control" placeholder="{$lenguaje.text_buscar_rol}" style="width: 150px; float: left; margin: 0px 10px;" name="nombre" id="palabra">
+                    <input class="form-control" placeholder="{$lenguaje.text_buscar_rol}" style="width: 150px; float: left; margin: 0px 10px;" name="palabraRol" id="palabraRol">
                     <button class="btn btn-success" style=" float: left" type="button" id="buscar"  ><i class="glyphicon glyphicon-search"></i></button>
                 </div>
             <!-- <p style="direction: rtl"><a class="btn btn-primary" href="{$_layoutParams.root}acl/index/nuevo_role"><i class="glyphicon glyphicon-plus-sign"></i> Agregar</a> </p> -->
             </div>
             <h4 class="panel-title"> <b>{$lenguaje.roles_buscar_tabla_titulo}</b></h4>
-            <div id="listaregistros" >
+            <div id="listarRoles" >
                 {if isset($roles) && count($roles)}
                     <div class="table-responsive">
                         <table class="table" style="  margin: 20px auto">
                             <tr>
                                 <th style=" text-align: center">{$lenguaje.label_n}</th>
                                 <th >{$lenguaje.label_rol}</th>
+                                <th >{$lenguaje.label_modulo} </th>
                                 <th style=" text-align: center">{$lenguaje.label_estado}</th>
                                 {if $_acl->permiso("editar_rol")}
                                 <th style=" text-align: center">{$lenguaje.label_opciones}</th>
                                 {/if}
                             </tr>
                             {foreach item=rl from=$roles}
-                                <tr>
+                                <tr {if $rl.Row_Eliminar==0}
+                                        {if $_acl->permiso("ver_eliminados")}
+                                            class="btn-danger"
+                                        {else}
+                                            hidden {$numeropagina = $numeropagina-1}
+                                        {/if}
+                                    {/if} >
                                     <td style=" text-align: center">{$numeropagina++}</td>
-                                    <td>{$rl.Rol_role}</td>
+                                    <td>{$rl.Rol_Nombre}</td>
+                                    <td>{$rl.Mod_Nombre|default:" - "}</td>
                                     <td style=" text-align: center">
                                         {if $rl.Rol_Estado==0}
-                                            <p class="glyphicon glyphicon-remove-sign " title="{$lenguaje.label_denegado}" style="color: #DD4B39;"></p>
+                                            <p data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-remove-sign " title="{$lenguaje.label_denegado}" style="color: #DD4B39;"></p>
                                         {/if}                            
                                         {if $rl.Rol_Estado==1}
-                                            <p class="glyphicon glyphicon-ok-sign " title="{$lenguaje.label_habilitado}" style="color: #088A08;"></p>
+                                            <p data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-ok-sign " title="{$lenguaje.label_habilitado}" style="color: #088A08;"></p>
                                         {/if}
                                     </td>
                                     {if $_acl->permiso("editar_rol")}
                                     <td style=" text-align: center">
-                                        <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-pencil" title="{$lenguaje.tabla_opcion_editar_rol}" href="{$_layoutParams.root}acl/index/editarRol/{$rl.Rol_IdRol}"></a>
+                                        <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-refresh estado-rol" title="{$lenguaje.tabla_opcion_cambiar_est}" id_rol="{$rl.Rol_IdRol}" estado="{$rl.Rol_Estado}"> </a>
+                                        
+                                        <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-edit" title="{$lenguaje.tabla_opcion_editar_rol}" href="{$_layoutParams.root}acl/index/editarRol/{$rl.Rol_IdRol}"></a>
+
                                         <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-list" title="{$lenguaje.tabla_opcion_editar_permisos}" href="{$_layoutParams.root}acl/index/permisos_role/{$rl.Rol_IdRol}"></a>
-                                        <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-refresh" title="{$lenguaje.tabla_opcion_cambiar_est}" href="{$_layoutParams.root}acl/index/_cambiarEstadoRol/{$rl.Rol_IdRol}/{$rl.Rol_Estado}"></a>
-                                        <a data-toggle="tooltip" data-placement="bottom" class="btn btn-default btn-sm glyphicon glyphicon-trash" title="{$lenguaje.label_eliminar}" href="{$_layoutParams.root}acl/index/_eliminarRol/{$rl.Rol_IdRol}"></a>
+
+                                        <a   
+                                        {if $rl.Row_Eliminar==0}
+                                            data-toggle="tooltip" 
+                                            class="btn btn-default btn-sm  glyphicon glyphicon-ok confirmar-habilitar-rol" title="{$lenguaje.label_habilitar}" 
+                                        {else}
+                                            data-book-id="{$rl.Rol_Nombre}"
+                                            data-toggle="modal"  data-target="#confirm-delete"
+                                            class="btn btn-default btn-sm  glyphicon glyphicon-trash confirmar-eliminar-rol" title="{$lenguaje.label_eliminar}"
+                                        {/if} 
+                                        id_rol="{$rl.Rol_IdRol}" data-placement="bottom" > </a>
+
                                     </td>
                                     {/if}
                                 </tr>
@@ -80,6 +101,28 @@
                 {else}
                     {$lenguaje.no_registros}
                 {/if}                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal " id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Confirmación de Eliminación</h4>
+            </div>
+            <div class="modal-body">
+                <p>Estás a punto de borrar un item, este procedimiento es irreversible</p>
+                <p>¿Deseas Continuar?</p>
+                <p>Eliminar: <strong  class="nombre-es">Rol</strong></p>
+                <label id="texto_" name='texto_'></label>
+                <!-- <input type='text' class='form-control' name='codigo' id='validate-number' placeholder='Codigo' required> --> 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <a style="cursor:pointer"  data-dismiss="modal" class="btn btn-danger danger eliminar_rol">Eliminar</a>
             </div>
         </div>
     </div>

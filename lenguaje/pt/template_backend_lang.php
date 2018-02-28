@@ -16,6 +16,7 @@ $lenguaje["menu_izquierdo_1_3"]="USUÁRIOS";
 $lenguaje["menu_izquierdo_1_3_1"]="Usuários";
 $lenguaje["menu_izquierdo_1_3_2"]="Papéis";
 $lenguaje["menu_izquierdo_1_3_3"]="Licenças";
+$lenguaje["menu_izquierdo_1_3_4"]="Módulos";
 $lenguaje["menu_izquierdo_1_4"]="BITACORA";
 $lenguaje["menu_izquierdo_1_5"]="ESTATÍSTICAS";
 $lenguaje["menu_izquierdo_1_5_1"]="Visualizações";

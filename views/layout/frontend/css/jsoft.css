@@ -696,10 +696,10 @@ Apple Watch: 42mm de anchura de pantalla, viewport de 256px (calculado en relaci
         display: block;
     }
 
-    #section-content-buscador{
+    /*#section-content-buscador{
         padding-left: 0px;
         padding-right: 0px;
-    }
+    }*/
     section#logos-index {
         padding-top: 35px;
         padding-left: 0px;
@@ -714,12 +714,12 @@ Apple Watch: 42mm de anchura de pantalla, viewport de 256px (calculado en relaci
     }
     #buscador input[type=button] {
         background: #3B7819 url(../img/ic-buscador.png) no-repeat center;
-        height: 28px;
+        height: 29px;
         /* width: 35px; */
         border-radius: 1em;
         border: 0;
         position: absolute; 
-        right: 3px;
+        right: 0px;
         /* top: 29px; */
         z-index: 10;
     }
@@ -755,7 +755,8 @@ Apple Watch: 42mm de anchura de pantalla, viewport de 256px (calculado en relaci
     #section-content-buscador{
         padding-left: 0px;
         padding-right: 0px;
-    }/*
+    }
+    /*
     section#buscador{
         width: 19.666667%;      
     }

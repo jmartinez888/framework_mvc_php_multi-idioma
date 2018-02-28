@@ -1,6 +1,6 @@
 <?php
 
-$lenguaje["buscador_titulo"]="Buscador General del SII GEF OTCA";
+$lenguaje["buscador_titulo"]="Buscador General del ORA";
 $lenguaje["buscador_resultado1"]="Se encontraron";
 $lenguaje["buscador_resultado2"]="resultados con la palabra";
 $lenguaje["buscador_listado_titulo"]="Listado de Búsqueda";

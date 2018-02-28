@@ -1,6 +1,6 @@
 <?php
 
-$lenguaje["buscador_titulo"]="SEARCH SII GEF OTCA";
+$lenguaje["buscador_titulo"]="Main search engine ARO";
 $lenguaje["buscador_resultado1"]="They were found";
 $lenguaje["buscador_resultado2"]="results with the word";
 $lenguaje["buscador_listado_titulo"]="SEARCH LISTINGS";

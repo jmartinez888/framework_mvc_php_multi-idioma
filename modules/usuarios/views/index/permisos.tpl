@@ -9,8 +9,7 @@
         </div>        
         <div class="panel-body" style="width: 90%; margin: 0px auto">
             <h4>
-                <b><i class="fa fa-user"></i>&nbsp;&nbsp;{$lenguaje.label_usuario} : &nbsp;&nbsp; {$info.Usu_Usuario} </b>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
-                <b><i class="fa fa-user-secret"></i>&nbsp;&nbsp;{$lenguaje.label_rol} : &nbsp;&nbsp; {$info.Rol_role}</b>
+                <b><i class="fa fa-user"></i>&nbsp;&nbsp;{$lenguaje.label_usuario} : &nbsp;&nbsp; {$info.Usu_Usuario} </b>
             </h4>
             <br>
             <form class="form-horizontal" role="form" name="form1" method="post" action="">
@@ -18,18 +17,21 @@
                 {if isset($permisos) && count($permisos)}
                     <div class="table-responsive" >
                     <table class="table">
-                        <tr><td><b>{$lenguaje.label_permiso}</b></td>
+                        <tr><td><b>N°</b></td>
+                            <td><b>{$lenguaje.label_permiso}</b></td>
+                            <td><b>Rol</b></td>
                             <td><b>{$lenguaje.label_estado}</b></td>
                         </tr>
                         {foreach from=$permisos item=pr}
-                            {if $role.$pr.valor == 1}
+                            {if $roles.$pr.valor == 1}
                                 {assign var="v" value="{$lenguaje.label_habilitado}"}
                             {else}
                                 {assign var="v" value="{$lenguaje.label_denegado}"}
                             {/if}
                         <tr>
-                            <td>{$usuario.$pr.permiso}: </td>
-            
+                            <td>{$numeropagina++}</td>
+                            <td>{$usuario.$pr.permiso}: </td>  
+                            <td>{$usuario.$pr.rol} </td>           
                             <td>
                                 <select name="perm_{$usuario.$pr.id}">
                                     <option value="x"{if $usuario.$pr.heredado} selected="selected"{/if}>Heredado({$v})</option>

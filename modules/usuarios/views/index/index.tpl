@@ -109,7 +109,7 @@
                             <select class="form-control" id="buscarRol" name="buscarRol">
                                 <option value="">{$lenguaje.label_todos_roles}</option>
                             {foreach from=$roles item=r}
-                                <option value="{$r.Rol_IdRol}">{$r.Rol_role}</option>    
+                                <option value="{$r.Rol_IdRol}">{$r.Rol_Nombre}</option>    
                             {/foreach}
                             </select>
                         {/if}
@@ -138,7 +138,17 @@
                                         <tr>
                                             <td>{$numeropagina++}</td>
                                             <td>{$us.Usu_Usuario}</td>
-                                            <td>{$us.Rol_role}</td>
+
+                                            <td>
+                                                {if isset($us.Roles)}
+                                                    <ul>
+                                                        {foreach item=r from=$us.Roles}
+                                                            <li>{$r.Rol_Nombre}</li>
+                                                        {/foreach}
+                                                    </ul>
+                                                {/if}
+                                            </td>
+
                                             <td style=" text-align: center">
                                                 {if $us.Usu_Estado==0}
                                                     <p data-toggle="tooltip" data-placement="bottom" class="glyphicon glyphicon-remove-sign " title="{$lenguaje.label_deshabilitado}" style="color: #DD4B39;"></p>

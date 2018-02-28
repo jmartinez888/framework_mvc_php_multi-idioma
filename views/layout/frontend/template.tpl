@@ -24,7 +24,7 @@
         </style>
         
         <link href="{$_layoutParams.ruta_css}simple-sidebar.css" rel="stylesheet" type="text/css">
-        <link href="{$_layoutParams.ruta_css}jsoft-lage.css" rel="stylesheet" type="text/css">
+        <link href="{$_layoutParams.ruta_css}jmartinez.css" rel="stylesheet" type="text/css">
         <link href="{$_layoutParams.ruta_css}jsoft.css" rel="stylesheet" type="text/css">
         <link href="{$_layoutParams.root_clear}public/css/util.css" rel="stylesheet" type="text/css">         
         <link href="{$_layoutParams.ruta_css}AdminLTE.min.css" rel="stylesheet" type="text/css" />
@@ -42,25 +42,29 @@
     <body class="template-content">
         <header>
             <h1 class="col-xs-11 col-sm-6 col-md-5 col-lg-4">
-                <a href="{$_layoutParams.root}" title="SISTEMA INTEGRADO DE INFORMACIÓN"><img src="{$_layoutParams.ruta_img}{$lenguaje.imagen_logosii}"></a>
+                <a href="{$_layoutParams.root}" title=" PHP MVC MULTIIDIOMA "><img src="{$_layoutParams.ruta_img}{$lenguaje.imagen_logosii}"></a>
                <!-- <a href="#"><img src="{$_layoutParams.ruta_img}gef.png"></a>-->
             </h1>
             <button type="button" class="navbar-right navbar-toggle collapsed col-xs-1" data-toggle="collapse" data-target="#navbar-collapse">
                 <i class="fa fa-bars"></i>
             </button> 
             <div class="col-sm-6 col-md-7 col-lg-8" id="section-content-buscador" >
-                <section class="col-xs-12 col-sm-6 col-md-7 col-lg-offset-5 col-lg-5" id="logos-index">         
-                   
-                </section>
-                <section class="col-xs-12 col-sm-6 col-md-5 col-lg-2" id="buscador">
+                
+                <section class="col-xs-12 col-sm-offset-6 col-sm-6 col-md-offset-7 col-md-5 col-lg-offset-9 col-lg-2" id="buscador">
                     <ul class="idiomas">
-                        <li><a href="{$_layoutParams.root_clear}index/_loadLang/es">Español</a></li>
-                        <li><a href="{$_layoutParams.root_clear}index/_loadLang/en">English</a></li>
-                        <li><a href="{$_layoutParams.root_clear}index/_loadLang/pt">Português</a></li>
+                        <li><a href="{$_layoutParams.root}index/_loadLang/es">Español</a></li>
+                        <li><a href="{$_layoutParams.root}index/_loadLang/en">English</a></li>
+                        <li><a href="{$_layoutParams.root}index/_loadLang/pt">Português</a></li>
                     </ul>
-                               
+                    <form class="navbar-form navbar-right form-horizontal " data-toggle="validator" id="form1" role="form" method="post" autocomplete="on">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <input class="col-xs-1" type="button" id="btnBuscar" name="btnBuscar" onclick="buscarPalabra('textBuscar')" value="" > 
+                            <input class = "col-xs-12 col-sm-12 col-lg-12" data-toggle="tooltip" data-placement="bottom" title="Busca en Arquitectura SII, Base de Datos Documentos, Base de Datos Legislacion, Base de Datos Recursos, " type="search" id="textBuscar" name="textBuscar" placeholder="{$lenguaje.text_buscador|default}" value="{$palabra|default:''}" required="required" onkeypress="tecla_enter(event)" >
+                           
+                        </div>                   
+                    </form>                
                 </section>
-            </div>           
+            </div>   
 
             {if isset($widgets.top)}
                 {foreach from=$widgets.top item=wd}
@@ -77,7 +81,7 @@
                             </li>
                         {else}
                             <li>
-                                <a href="#"  data-placement="bottom" class=" form-login"title="Intranet" data-toggle="modal" data-target="#modal-1">
+                                <a href="#"  data-placement="bottom" class=" form-login" title="Intranet" data-toggle="modal" data-target="#modal-login">
                                     <i style="font-size:15px" class="fa  fa-user"></i> {$lenguaje.text_iniciarsession}</a>                      
                             </li>
                         {/if}
@@ -136,24 +140,104 @@
 
 
         <!--  Modal login -->
-        <div class="modal fade top-space-0" id="modal-1" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content cursor-pointer">
-                    <div class="modal-header">
-                        <!--  <button type="button" class="close" data-dismiss="#modal-1">CLOSE &times;</button>-->
-                        <h1 class="modal-title" >{$lenguaje["login_intranet"]}</h1>
-                    </div>
 
-                    <div class="modal-body">     
-                        <form class="form-signin" name="form1" method="post" action="{$_layoutParams.root}usuarios/login" autocomplete="on"> 
-                            <input type="hidden" value="1" name="enviar" />  
-                            <h2 class="form-signin-heading">{$lenguaje["login_intranet_1"]}</h2>
-                            <input type="text" class="form-control" name="usuario" value="{$datos.usuario|default:""}"  placeholder="Usuario" required="" autofocus="" />
-                            <br>
-                            <input type="password" class="form-control" name="pass" placeholder="Contraseña" required=""/>      
-                            <br>
-                            <button id="logear" name="logear" class="btn btn-lg btn-success btn-block" type="submit">{$lenguaje["login_intranet_2"]}</button>   
-                        </form>
+        <div class="modal fade top-space-0" id="modal-login" tabindex="-1" role="dialog">
+            <div class="modal-dialog login-dialog">
+                <div class="modal-content cursor-pointer" id="mensajeLogeo">
+                    <!-- <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="#modal-1">CLOSE &times;</button>
+                        <h1 class="modal-title" >{$lenguaje["login_intranet"]}</h1>
+                    </div> -->
+
+                    <div class="modal-body" >
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="panel panel-login">
+                                    <div class="panel-heading">
+                                        <div class="row">
+                                            <div class="col-xs-6">
+                                                <a href="#" class="active" id="login-form-link">{$lenguaje["text_iniciarsession"]}</a>
+                                            </div>
+                                            <div class="col-xs-6">
+                                                <a href="#" id="register-form-link">Regístrate ahora</a>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <form id="login-form" action="#" method="post" role="form" style="display: block;">
+                                                    <input type="hidden" name="url" id="url" value="{$url}">
+                                                    <input type="hidden" name="modulo" id="modulo" value="foro">
+                                                    <div class="form-group">
+                                                        <label for="disabledTextInput">Usuario</label>
+                                                        <input type="text" name="usuarioLogin" id="usuarioLogin" tabindex="1" class="form-control" placeholder="Usuario" value="" required="">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="disabledTextInput">Contraseña</label>
+                                                        <input type="password" name="passwordLogin" id="passwordLogin" tabindex="2" class="form-control" placeholder="Contraseña" required="" onkeypress="tecla_enter_login(event)">
+                                                    </div>
+                                                    <!-- <div class="form-group text-center">
+                                                        <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
+                                                        <label for="remember"> Recordarme</label>
+                                                    </div> -->
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-sm-6 col-sm-offset-3">
+                                                                <button type="button" name="logear" id="logear" tabindex="4" class="form-control btn btn-login" >{$lenguaje["text_iniciarsession"]}</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-lg-12">
+                                                                <div class="text-center">
+                                                                    <a href="#" tabindex="5" class="forgot-password">¿Has olvidado tu contraseña?</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <form id="register-form" action="" style="display: none;">
+                                                    <div class="form-group">
+                                                        <label for="">Nombre(s)</label>
+                                                        <input type="text" name="nombreRegistrar" id="nombreRegistrar" pattern="([a-zA-Z][\sa-zA-Z]+)" tabindex="1" class="form-control" placeholder="Nombre(s)" value="">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="">Apellidos</label>
+                                                        <input type="text" name="apellidosRegistrar" id="apellidosRegistrar" pattern="([a-zA-Z][\sa-zA-Z]+)" tabindex="2" class="form-control" placeholder="Apellidos" value="">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="">Correo electrónico</label>
+                                                        <input type="email" name="emailRegistrar" id="emailRegistrar" tabindex="3" class="form-control" placeholder="Correo electrónico" value="">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="">Usuario</label>
+                                                        <input type="text" name="usuarioRegistrar" id="usuarioRegistrar" pattern="([_A-z0-9])+" tabindex="4" class="form-control" placeholder="Usuario" value="">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="">Contraseña</label>
+                                                        <input type="password" name="passwordRegistrar" id="passwordRegistrar" data-minlength="6" tabindex="5" class="form-control" placeholder="Contraseña">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="">Confirmar contraseña</label>
+                                                        <input type="password" name="confirm-password" id="confirm-password" data-minlength="6" data-match="#contrasena" data-match-error="*Contraseña no coinciden" tabindex="6" class="form-control" placeholder="Confirmar contraseña">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-sm-6 col-sm-offset-3">
+                                                                <button type="button" name="registrar-login" id="registrar-login" tabindex="7" class="form-control btn btn-register" value="">Crear cuenta</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="modal-footer">
@@ -162,10 +246,7 @@
                 </div>
             </div>
         </div>
-
-
-
-
+<!-- 
 
         <style type="text/css"> 
             .form-signin {
@@ -209,7 +290,7 @@
                 }
             }
 
-        </style>
+        </style> -->
         <!--  Modal end -->
        
          <script type="text/javascript" src="{$_layoutParams.root_clear}public/js/jquery-1.11.2.min.js"></script>
@@ -225,6 +306,7 @@
         <script src="{$_layoutParams.ruta_js}bootstrap.min.js" type="text/javascript"></script>
         <script src="{$_layoutParams.ruta_js}app.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="{$_layoutParams.root_clear}public/js/Validator.js"></script>
+        <script type="text/javascript" src="{$_layoutParams.root_clear}public/js/login.js"></script>
         <script type="text/javascript" src="{$_layoutParams.root_clear}public/js/util.js"></script>
         <script type="text/javascript" src="{$_layoutParams.root_clear}public/js/jquery.slimscroll.min.js"></script>
 
@@ -272,6 +354,7 @@
             }
            
         }
+        
 
         function buscarPalabra(campo) { 
             var palabra = $('#'+campo).val(); 
